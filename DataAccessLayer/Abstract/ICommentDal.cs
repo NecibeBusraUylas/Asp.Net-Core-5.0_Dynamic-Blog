@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Repositories
+namespace DataAccessLayer.Abstract
 {
-    public class ContactRepository : GenericRepository<Contact>
+    public interface ICommentDal : IGenericDal<Comment>
     {
     }
 }
