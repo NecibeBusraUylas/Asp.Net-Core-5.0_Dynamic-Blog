@@ -18,6 +18,7 @@ namespace Dynamic_Blog.Controllers
         }
         public IActionResult BlogDetails(int id) //blog details page call
         {
+            ViewBag.i = id;
             var values = bm.GetBlogById(id);
             return View(values);
         }
