@@ -3,6 +3,7 @@ using BusinessLayer.ValidationRules;
 using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -16,6 +17,7 @@ namespace Dynamic_Blog.Controllers
     {
         WriterManager wm = new WriterManager(new EFWriterRepository());
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
@@ -24,6 +26,7 @@ namespace Dynamic_Blog.Controllers
             return View(writersAndCities);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Index(WriterAndCity writersAndCities, string passwordAgain, string cities)
         {

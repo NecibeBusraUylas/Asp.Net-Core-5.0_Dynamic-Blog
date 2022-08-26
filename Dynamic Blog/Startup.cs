@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +27,27 @@ namespace Dynamic_Blog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //project level authorization
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            //authorization yokken sayfaya yönlendirmesini istediðimde hata vermesin login'e yönlendirsin
+            services.AddMvc();
+            services.AddAuthentication(
+               CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(x =>
+               {
+                   x.LoginPath = "/Login/Index";
+               }
+           );
+
+            //services.AddSession(); //session
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,12 +63,22 @@ namespace Dynamic_Blog
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //error page
+            //app.UseStatusCodePages();  yanlýþ istek olunca sayfada Status Code: 404 Not Found çýktýsý verir
+            app.UseStatusCodePagesWithReExecute("/ErrorPage/Error404", "?code={0}"); //yanlýþ istekte Error Page içindeki Error1'e yönlendir hata code'u code içinde yazan
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
+
+            //app.UseSession(); //session
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
