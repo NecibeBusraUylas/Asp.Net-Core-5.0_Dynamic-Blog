@@ -1,4 +1,4 @@
-﻿@model DynamicBlog.Models.WriterAndCity
+﻿@model EntityLayer.Concrete.Writer
 
 @{
     ViewData["Title"] = "Index";
@@ -17,39 +17,39 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom01">Adınız Soyadınız</label>
-                            @Html.TextBoxFor(x => x.Writer.WriterName, new { @class = "form-control", @id = "validationDefault01", @placeholder = "Adınızı giriniz.", @required = "" })
-                            @Html.ValidationMessageFor(x => x.Writer.WriterName, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(x => x.WriterName, new { @class = "form-control", @id = "validationDefault01", @placeholder = "Adınızı giriniz.", @required = "" })
+                            @Html.ValidationMessageFor(x => x.WriterName, "", new { @class = "text-danger" })
                             @*<input type="text" class="form-control" id="validationDefault01" name="WriterName" placeholder="" required="">*@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom02">E-Mail Adresi</label>
-                            @Html.TextBoxFor(x => x.Writer.WriterMail, new { @class = "form-control", @id = "validationDefault02", @placeholder = "E-mail adresinizi giriniz", @required = "" })
-                            @Html.ValidationMessageFor(x => x.Writer.WriterMail, "", new { @class = "text-danger" })
+                            @Html.TextBoxFor(x => x.WriterMail, new { @class = "form-control", @id = "validationDefault02", @placeholder = "E-mail adresinizi giriniz", @required = "" })
+                            @Html.ValidationMessageFor(x => x.WriterMail, "", new { @class = "text-danger" })
                             @*<input type="email" class="form-control" id="validationDefault02" placeholder="" name="WriterMail" required="">*@
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="exampleInputPassword1 mb-2">Parola</label>
-                            @Html.PasswordFor(x => x.Writer.WriterPassword, new { @class = "form-control", @id = "password1", @placeholder = "Parolanızı giriniz", @required = "" })
-                            @Html.ValidationMessageFor(x => x.Writer.WriterPassword, "", new { @class = "text-danger" })
+                            @Html.PasswordFor(x => x.WriterPassword, new { @class = "form-control", @id = "password1", @placeholder = "Parolanızı giriniz", @required = "" })
+                            @Html.ValidationMessageFor(x => x.WriterPassword, "", new { @class = "text-danger" })
                             @*<input type="password" class="form-control" id="password1" name="WriterPassword" placeholder="" required="">*@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleInputPassword2 mb-2">Parolanızı Tekrar Giriniz</label>
                             @Html.Password("passwordAgain", "", new { @class = "form-control", @id = "password2", @placeholder = "Parolanızı tekrar giriniz", @required = "" })
-                            @Html.ValidationMessageFor(x => x.Writer.WriterPassword, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(x => x.WriterPassword, "", new { @class = "text-danger" })
                             @*<input type="password" class="form-control" id="password2" name="PasswordAgain" placeholder="" required="">*@
                         </div>
                         <div class="form-group col-md-6">
                             @*<label for="exampleInputPassword2 mb-2">Şehir</label>*@
                             <label for="validationCustom01 mb-2">Şehir</label>
-                            @Html.DropDownListFor(x => x.City, Model.Cities, "", new { @class = "form-control dropdown" })
+                            @Html.DropDownListFor(x => x.WriterCity, (List<SelectListItem>)ViewBag.Cities, "", new { @class = "form-control dropdown" })
                         </div>
                         <div class="form-group col-md-6">
                             @*<label for="exampleInputPassword1 mb-2">Resim Dosya Yolu</label>*@
                             <label for="validationCustom01 mb-2">Resim Dosya Yolu</label>
-                            @Html.TextBoxFor(x => x.Writer.WriterImage, new { @class = "form-control", @id = "imageLink", @placeholder = "Profil fotoğrafınız için link giriniz.", @required = "" })
+                            @Html.TextBoxFor(x => x.WriterImage, new { @class = "form-control", @id = "imageLink", @placeholder = "Profil fotoğrafınız için link giriniz.", @required = "" })
                             @*<input type="text" class="form-control" id="imageLink" name="WriterImage" placeholder="" required="">*@
                         </div>
                     </div>

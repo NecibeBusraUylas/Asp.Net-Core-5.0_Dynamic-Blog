@@ -1,7 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
 using DataAccessLayer.EntityFramework;
-using DynamicBlog.Models;
+using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,22 +21,21 @@ namespace Dynamic_Blog.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            WriterAndCity writersAndCities = new WriterAndCity();
-            writersAndCities.Cities = GetCityList();
-            return View(writersAndCities);
+            ViewBag.Cities = GetCityList();
+            return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Index(WriterAndCity writersAndCities, string passwordAgain, string cities)
+        public IActionResult Index(Writer writer, string passwordAgain, string cities)
         {
             WriterValidator wv = new WriterValidator();
-            ValidationResult results = wv.Validate(writersAndCities.Writer);
-            if (results.IsValid && writersAndCities.Writer.WriterPassword == passwordAgain)
+            ValidationResult results = wv.Validate(writer);
+            if (results.IsValid && writer.WriterPassword == passwordAgain)
             {
-                writersAndCities.Writer.WriterStatus = true;
-                writersAndCities.Writer.WriterAbout = "Deneme test";
-                wm.AddWriter(writersAndCities.Writer);
+                writer.WriterStatus = true;
+                writer.WriterAbout = "Deneme test";
+                wm.TAdd(writer);
                 return RedirectToAction("Index", "Blog");
             }
             else if (!results.IsValid)
@@ -46,13 +45,13 @@ namespace Dynamic_Blog.Controllers
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
             }
-            else if(writersAndCities.Writer.WriterPassword != passwordAgain)
+            else if(writer.WriterPassword != passwordAgain)
             {
                 ModelState.AddModelError("WriterPassword", "Girdiğiniz parolalar eşleşmedi lütfen tekrar deneyin");
             }
-            writersAndCities.Cities = GetCityList();
+            ViewBag.Cities = GetCityList();
 
-            return View(writersAndCities);
+            return View();
         }
 
         public List<SelectListItem> GetCityList()
@@ -62,6 +61,9 @@ namespace Dynamic_Blog.Controllers
                                               {
                                                   Text = x,
                                                   Value = x
+                                                  //Group= aynı ada sahip birden çok seçim yaptırmak için
+                                                  //Disabled= seçime izin vermek alanın işlevini kapatır
+                                                  //selected= ilkaçıldığında hangi value seçilmiş gelecek
                                               }).ToList();
             return cities;
         }

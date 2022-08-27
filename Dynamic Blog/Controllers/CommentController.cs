@@ -31,7 +31,7 @@ namespace Dynamic_Blog.Controllers
             p.CommentDate = DateTime.Parse(DateTime.Now.ToShortDateString());
             p.CommentStatus = true;
             p.BlogId = 2;
-            cm.AddComment(p);
+            cm.TAdd(p);
             return PartialView();
         }
 

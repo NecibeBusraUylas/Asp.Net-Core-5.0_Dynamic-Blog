@@ -25,7 +25,7 @@ namespace BusinessLayer.Concrete
             _categoryDal = categoryDal;
         }
 
-        public void AddCategory(Category category)
+        public void TAdd(Category t)
         {
             //if(category.CategoryName!="" && category.CategoryDescription != "" && 
             //    category.CategoryName.Length>=5 && category.CategoryStatus== true)
@@ -37,10 +37,10 @@ namespace BusinessLayer.Concrete
             //    //hata mesajı
             //}
             //categoryRepository.Add(category);
-            _categoryDal.Add(category);
+            _categoryDal.Add(t);
         }
 
-        public void DeleteCategory(Category category)
+        public void TDelete(Category t)
         {
             //if (category.CategoryId!= 0)
             //{
@@ -51,10 +51,10 @@ namespace BusinessLayer.Concrete
             //    //hata mesajı
             //}
             //categoryRepository.Delete(category);
-            _categoryDal.Delete(category);
+            _categoryDal.Delete(t);
         }
 
-        public Category GetById(int id)
+        public Category TGetById(int id)
         {
             // return categoryRepository.GetById(id);
             return _categoryDal.GetById(id);
@@ -66,10 +66,10 @@ namespace BusinessLayer.Concrete
             return _categoryDal.GetListAll();
         }
 
-        public void UpdateCategory(Category category)
+        public void TUpdate(Category t)
         {
             //categoryRepository.Update(category);
-            _categoryDal.Update(category);
+            _categoryDal.Update(t);
         }
     }
 }
