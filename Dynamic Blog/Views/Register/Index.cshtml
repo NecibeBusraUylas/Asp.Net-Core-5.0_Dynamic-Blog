@@ -12,8 +12,7 @@
         <h3 class="tittle">Yazar Kayıt Sayfası</h3>
         <div class="inner-sec">
             <div class="login p-5 bg-light mx-auto mw-100">
-                @using (Html.BeginForm("Index", "Register", FormMethod.Post))
-                {
+                <form class="form-group" method="post" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="validationCustom01">Adınız Soyadınız</label>
@@ -47,17 +46,23 @@
                             @Html.DropDownListFor(x => x.WriterCity, (List<SelectListItem>)ViewBag.Cities, "", new { @class = "form-control dropdown" })
                         </div>
                         <div class="form-group col-md-6">
-                            @*<label for="exampleInputPassword1 mb-2">Resim Dosya Yolu</label>*@
-                            <label for="validationCustom01 mb-2">Resim Dosya Yolu</label>
-                            @Html.TextBoxFor(x => x.WriterImage, new { @class = "form-control", @id = "imageLink", @placeholder = "Profil fotoğrafınız için link giriniz.", @required = "" })
-                            @*<input type="text" class="form-control" id="imageLink" name="WriterImage" placeholder="" required="">*@
+                            <label for="validationCustom01 mb-2">Resim</label>
+                            @*@Html.TextBoxFor(x => x.WriterImage, new { @class = "form-control", @id = "imageLink", @placeholder = "Profil fotoğrafınız için link giriniz.", @required = "" })*@
+                            <input type="file" class="form-control-file" id="imageLink" name="imageFile" placeholder="" required="">
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="validationCustom01 mb-2">Hakkınızda</label>
+                                @Html.TextAreaFor(x => x.WriterAbout, 15, 4, new { @class = "form-control", @placeholder = "Hakkınızda" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessage("ErrorMessage", "", new { @class = "text-danger" })
                     </div>
                     <button type="submit" class="btn btn-primary submit mb-4">Kayıt Ol</button>
                     <p>
                         <a href="#" id="btn1">Tüm şartları okudum, kabul ediyorum.</a>
                     </p>
-                }
+                </form>
             </div>
         </div>
     </div>

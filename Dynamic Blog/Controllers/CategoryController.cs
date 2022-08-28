@@ -13,7 +13,7 @@ namespace Dynamic_Blog.Controllers
         CategoryManager cm = new CategoryManager(new EFCategoryRepository());
         public IActionResult Index()
         {
-            var values = cm.GetList();
+            var values = cm.TGetList(null);
             return View(values);
         }
     }

@@ -5,6 +5,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,16 +61,25 @@ namespace BusinessLayer.Concrete
             return _categoryDal.GetById(id);
         }
 
-        public List<Category> GetList()
+        public List<Category> TGetList(Expression<Func<Category, bool>> filter)
         {
-            //return categoryRepository.GetListAll();
-            return _categoryDal.GetListAll();
+            return filter == null ?
+                _categoryDal.GetListAll() :
+                _categoryDal.GetListAll(filter);
         }
+
 
         public void TUpdate(Category t)
         {
             //categoryRepository.Update(category);
             _categoryDal.Update(t);
+        }
+
+        public Category TGetByFilter(Expression<Func<Category, bool>> filter)
+        {
+            return filter == null ?
+                 _categoryDal.GetByFilter() :
+                 _categoryDal.GetByFilter(filter);
         }
     }
 }

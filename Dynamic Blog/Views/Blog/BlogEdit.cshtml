@@ -10,16 +10,28 @@
 {
     @Html.Label("Blog Id")
     @Html.TextBoxFor(x => x.BlogId, new { @class = "form-control" })
+    <br />
     @Html.Label("Blog Başlığı")
     @Html.TextBoxFor(x => x.BlogTitle, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.BlogTitle, "", new { @class = "text-danger" })
+    <br />
     @Html.Label("Blog Thumbnail Url")
     @Html.TextBoxFor(x => x.BlogThumbnailImage, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.BlogThumbnailImage, "", new { @class = "text-danger" })
+    <br />
     @Html.Label("Blog Görseli")
     @Html.TextBoxFor(x => x.BlogImage, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.BlogImage, "", new { @class = "text-danger" })
+    <br />
     @Html.Label("Blog Kategori")
     @Html.DropDownListFor(x => x.CategoryId, (List<SelectListItem>)ViewBag.blogCategory, new { @class = "form-control" })
+    <br />
     @Html.Label("Blog İçeriği")
     @Html.TextAreaFor(x => x.BlogContent, 15, 4, new { @class = "form-control" })
+    @Html.ValidationMessageFor(x => x.BlogContent, "", new { @class = "text-danger" })
+    <br />
+    @Html.Label("Blog Durumu (Aktif/Pasif)")
+    @Html.CheckBoxFor(x => x.BlogStatus, new { @class = "form-check" })
     <br />
     <button class="btn btn-success">Güncelle</button>
 }

@@ -6,15 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DynamicBlog.ViewsComponents.Blog
+namespace DynamicBlog.ViewsComponents.Category
 {
-    public class BlogLast3Posts: ViewComponent
+    public class CategoryListDashboard : ViewComponent
     {
+        CategoryManager cm = new CategoryManager(new EFCategoryRepository());
 
-        BlogManager bm = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = bm.GetLastPosts(3);
+            var values = cm.TGetList(null);
             return View(values);
         }
     }

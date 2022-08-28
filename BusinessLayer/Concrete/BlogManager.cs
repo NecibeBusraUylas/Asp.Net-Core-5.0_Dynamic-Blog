@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,17 +44,18 @@ namespace BusinessLayer.Concrete
             return _blogDal.GetById(id);
         }
 
-        public List<Blog> GetList()
+        public List<Blog> TGetList(Expression<Func<Blog, bool>> filter)
         {
-            return _blogDal.GetListAll();
+            return filter == null ?
+                _blogDal.GetListAll() :
+                _blogDal.GetListAll(filter);
         }
 
-        public List<Blog> GetLast3Posts()
+        public List<Blog> GetLastPosts(int number)
         {
-            //return _blogDal.GetListAll().Take(3).ToList(); //ilk 3 postu getirir
-            return _blogDal.GetListAll().TakeLast(3).ToList(); //son 3 postu getirir
+            return _blogDal.GetListAll().TakeLast(number).ToList();
         }
-
+        
         public void TAdd(Blog t)
         {
             _blogDal.Add(t);
@@ -67,6 +69,13 @@ namespace BusinessLayer.Concrete
         public void TUpdate(Blog t)
         {
             _blogDal.Update(t);
+        }
+
+        public Blog TGetByFilter(Expression<Func<Blog, bool>> filter)
+        {
+            return filter == null ?
+                _blogDal.GetByFilter() :
+                _blogDal.GetByFilter(filter);
         }
     }
 }

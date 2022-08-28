@@ -14,7 +14,7 @@ namespace Dynamic_Blog.ViewsComponents.Category
 
         public IViewComponentResult Invoke()
         {
-            var values = cm.GetList();
+            var values = cm.TGetList(null);
             return View(values);
         }
     }

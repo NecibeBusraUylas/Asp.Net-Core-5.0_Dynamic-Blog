@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,11 +24,6 @@ namespace BusinessLayer.Concrete
             return _newsLetterDal.GetById(id);
         }
 
-        public List<NewsLetter> GetList()
-        {
-            throw new NotImplementedException();
-        }
-
         public void TAdd(NewsLetter t)
         {
             _newsLetterDal.Add(t);
@@ -41,6 +37,19 @@ namespace BusinessLayer.Concrete
         public void TUpdate(NewsLetter t)
         {
             throw new NotImplementedException();
+        }
+
+        public NewsLetter TGetByFilter(Expression<Func<NewsLetter, bool>> filter)
+        {
+            return _newsLetterDal.GetByFilter(filter); return filter == null ?
+                 _newsLetterDal.GetByFilter() :
+                 _newsLetterDal.GetByFilter(filter);
+
+            public List<NewsLetter> TGetList(Expression<Func<NewsLetter, bool>> filter = null)
+        {
+             return filter == null ?
+                 _newsLetterDal.GetListAll() :
+                 _newsLetterDal.GetListAll(filter);
         }
     }
 }

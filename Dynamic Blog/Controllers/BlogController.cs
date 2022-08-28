@@ -39,7 +39,7 @@ namespace Dynamic_Blog.Controllers
         [HttpGet]
         public IActionResult BlogAdd()
         {
-            List<SelectListItem> categoryValues = (from x in cm.GetList()
+            List<SelectListItem> categoryValues = (from x in cm.TGetList(null)
                                                   select new SelectListItem
                                                   {
                                                       Text= x.CategoryName,
@@ -74,7 +74,7 @@ namespace Dynamic_Blog.Controllers
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
             }
-            List<SelectListItem> categoryValues = (from x in cm.GetList()
+            List<SelectListItem> categoryValues = (from x in cm.TGetList(null)
                                                    select new SelectListItem
                                                    {
                                                        Text = x.CategoryName,
@@ -96,11 +96,26 @@ namespace Dynamic_Blog.Controllers
             return RedirectToAction("BlogListByWriter");
         }
 
+        public IActionResult ChangeStatusBlog(int id)
+        {
+            var blogValue = bm.TGetById(id);
+            if (blogValue.BlogStatus)
+            {
+                blogValue.BlogStatus = false;
+            }
+            else
+            {
+                blogValue.BlogStatus = true;
+            }
+            bm.TUpdate(blogValue);
+            return RedirectToAction("BlogListByWriter");
+        }
+
         [HttpGet]
         public IActionResult BlogEdit(int id)
         {
             var blogValue = bm.TGetById(id);
-            List<SelectListItem> categoryValues = (from x in cm.GetList()
+            List<SelectListItem> categoryValues = (from x in cm.TGetList(null)
                                                    select new SelectListItem
                                                    {
                                                        Text = x.CategoryName,

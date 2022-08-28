@@ -17,10 +17,11 @@ namespace BusinessLayer.ValidationRules
             RuleFor(x => x.WriterName).MinimumLength(2).WithMessage("Lütfen en az 2 karakter girişi yapın.");
             RuleFor(x => x.WriterName).MaximumLength(50).WithMessage("En fazla 50 karakter girilebilir");
             RuleFor(x => x.WriterMail).NotEmpty().WithMessage("E-mail alanı boş geçilemez.");
-            RuleFor(x => x.WriterPassword).NotEmpty().WithMessage("Sifre bos gecilemez");
-            RuleFor(p => p.WriterPassword).Matches(@"[A-Z]+").WithMessage("Sifre en az bir büyük harf içermelidir");
-            RuleFor(p => p.WriterPassword).Matches(@"[a-z]+").WithMessage("Sifre en az bir küçük harf içermelidir");
-            RuleFor(p => p.WriterPassword).Matches(@"[0-9]+").WithMessage("Sifre en az bir rakam içermelidir");
+            RuleFor(x => x.WriterMail).EmailAddress().WithMessage("Lütfen geçerli bir e-mail giriniz.");
+            RuleFor(x => x.WriterAbout).NotEmpty().WithMessage("Hakkınızda kısmı boş Bırakılamaz.");
+            RuleFor(x => x.WriterPassword).NotEmpty().WithMessage("Parola bos gecilemez");
+            RuleFor(p => p.WriterPassword).Must(IsPasswordValid).WithMessage("Parola en az bir büyük harf, bir küçük harf ve rakam içermelidir");
+            RuleFor(x => x.WriterPassword).MinimumLength(6).WithMessage("Parolanız en az 6 karakter içermelidir.");
         }
 
         private bool IsPasswordValid(string arg)

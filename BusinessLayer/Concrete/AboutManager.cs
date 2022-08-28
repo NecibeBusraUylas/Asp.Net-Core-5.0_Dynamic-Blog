@@ -4,6 +4,7 @@ using EntityLayer.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,14 +34,23 @@ namespace BusinessLayer.Concrete
             throw new NotImplementedException();
         }
 
-        public List<About> GetList()
+        public List<About> TGetList(Expression<Func<About, bool>> filter)
         {
-            return _aboutDal.GetListAll();
+            return filter == null ?
+                _aboutDal.GetListAll() :
+                _aboutDal.GetListAll(filter);
         }
 
         public void TUpdate(About t)
         {
             throw new NotImplementedException();
+        }
+
+        public About TGetByFilter(Expression<Func<About, bool>> filter)
+        {
+            return filter == null ?
+                _aboutDal.GetByFilter() :
+                _aboutDal.GetByFilter(filter);
         }
     }
 }

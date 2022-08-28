@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.Repositories;
 using EntityLayer.Concrete;
 using System;
@@ -10,7 +11,6 @@ using System.Threading.Tasks;
 namespace DataAccessLayer.EntityFramework
 {
     public class EFWriterRepository : GenericRepository<Writer>, IWriterDal
-    {
-        
+    { 
     }
 }

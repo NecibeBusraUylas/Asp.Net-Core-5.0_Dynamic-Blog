@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 
 namespace DynamicBlog.ViewsComponents.Blog
 {
-    public class BlogLast3Posts: ViewComponent
+    public class BlogListDashboard: ViewComponent
     {
-
         BlogManager bm = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = bm.GetLastPosts(3);
+            var values = bm.GetBlogListWithCategory();
             return View(values);
         }
     }
