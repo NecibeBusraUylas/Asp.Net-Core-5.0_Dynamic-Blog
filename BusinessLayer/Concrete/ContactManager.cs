@@ -31,15 +31,15 @@ namespace BusinessLayer.Concrete
 
         public void TDelete(Contact t)
         {
-            throw new NotImplementedException();
+            _contactDal.Delete(t);
         }
 
         public void TUpdate(Contact t)
         {
-            throw new NotImplementedException();
+            _contactDal.Update(t);
         }
 
-        public Contact TGetByFilter(Expression<Func<Contact, bool>> filter)
+        public Contact TGetByFilter(Expression<Func<Contact, bool>> filter = null)
         {
             return filter == null ?
                 _contactDal.GetByFilter() :

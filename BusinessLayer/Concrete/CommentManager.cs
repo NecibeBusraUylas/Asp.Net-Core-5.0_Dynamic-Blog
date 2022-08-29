@@ -36,15 +36,15 @@ namespace BusinessLayer.Concrete
 
         public void TDelete(Comment t)
         {
-            throw new NotImplementedException();
+            _commentDal.Delete(t);
         }
 
         public void TUpdate(Comment t)
         {
-            throw new NotImplementedException();
+            _commentDal.Update(t);
         }
 
-        public Comment TGetByFilter(Expression<Func<Comment, bool>> filter)
+        public Comment TGetByFilter(Expression<Func<Comment, bool>> filter = null)
         {
             return filter == null ?
                  _commentDal.GetByFilter() :

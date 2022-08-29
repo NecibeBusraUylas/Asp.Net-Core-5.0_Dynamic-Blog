@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewsComponents\Blog\NewFolder\" />
     <Folder Include="wwwroot\WriterImageFiles\" />
   </ItemGroup>
 

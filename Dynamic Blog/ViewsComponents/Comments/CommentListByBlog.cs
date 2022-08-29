@@ -10,10 +10,10 @@ namespace Dynamic_Blog.Models.Commenrs
 {
     public class CommentListByBlog: ViewComponent
     {
-        CommentManager cm = new CommentManager(new EFCommentRepository());
+        CommentManager commentManager = new CommentManager(new EFCommentRepository());
         public IViewComponentResult Invoke(int id)
         {
-            var values = cm.GetList(id);
+            var values = commentManager.GetList(id);
             return View(values);
         }
     }

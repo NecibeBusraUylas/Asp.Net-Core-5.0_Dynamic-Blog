@@ -1,0 +1,39 @@
+﻿@using EntityLayer.Concrete
+@model List<Notification>
+
+@{
+    ViewData["Title"] = "AllNotifications";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+    string messagTime = "";
+    DateTime now = DateTime.Now;
+}
+
+<h1> Bildirimler</h1>
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Bildirim</th>
+            <td>Süre</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            TimeSpan time = now.Subtract(item.NotificationDate);
+            if (time.Days == 0)
+            {
+                messagTime = "Bugün";
+            }
+            else
+            {
+                messagTime = new DateTime(time.Ticks).ToString("d 'Gün önce' ");
+            }
+            <tr>
+                <td>@item.NotificationId</td>
+                <td>@item.NotificationDetails</td>
+                <td>@messagTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

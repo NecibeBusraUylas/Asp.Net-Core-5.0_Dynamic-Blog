@@ -13,7 +13,7 @@ namespace CoreDemo.Controllers
 {
     public class ContactController : Controller
     {
-        ContactManager cm = new ContactManager(new EFContactRepository());
+        ContactManager contactManager = new ContactManager(new EFContactRepository());
 
         [HttpGet]
         public IActionResult Index()
@@ -22,11 +22,11 @@ namespace CoreDemo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Contact p)
+        public IActionResult Index(Contact contact)
         {  
-                p.ContactDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                p.ContactStatus = true;
-                cm.TAdd(p);
+                contact.ContactDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                contact.ContactStatus = true;
+                contactManager.TAdd(contact);
                 return RedirectToAction("Index","Blog");
         }
     }

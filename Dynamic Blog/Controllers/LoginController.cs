@@ -1,4 +1,6 @@
-﻿using DataAccessLayer.Concrete;
+﻿using BusinessLayer.Concrete;
+using DataAccessLayer.Concrete;
+using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -23,23 +25,25 @@ namespace DynamicBlog.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Index(Writer p)
+        public async Task<IActionResult> Index(Writer writer)
         {
-            Context c = new Context();
-            var dataValues = c.Writers.FirstOrDefault(x=>x.WriterMail==p.WriterMail && x.WriterPassword==p.WriterPassword);
-            if(dataValues!= null)
+            WriterManager writermanager = new WriterManager(new EFWriterRepository());
+            var dataValue = writermanager.TGetByFilter(x => x.WriterMail == writer.WriterMail && x.WriterPassword == writer.WriterPassword);
+            if (dataValue != null)
+
             {
                 //      HttpContext.Session.SetString("username", p.WriterMail); //key-value pair for session
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, p.WriterMail)
+                    new Claim(ClaimTypes.Email, dataValue.WriterMail),
+                    new Claim(ClaimTypes.Name,  dataValue.WriterId.ToString())
                 };
                 //ClaimsIdentity(IEnumerable<Claim>)-> Numaralandırılmış nesne koleksiyonu kullanarak sınıfının yeni bir örneğini ClaimsIdentity Claim başlatır.
                 //ClaimsIdentity(IEnumerable<Claim>, String)-> Belirtilen talepler ve kimlik doğrulama türüyle sınıfının yeni bir örneğini ClaimsIdentity başlatır.
                 var useridentity = new ClaimsIdentity(claims,"a");
                 ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
                 await HttpContext.SignInAsync(principal); //şifreli formatta cookie oluşturmak için
-                return RedirectToAction("Index", "Writer");
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {

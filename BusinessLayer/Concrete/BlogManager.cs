@@ -44,7 +44,7 @@ namespace BusinessLayer.Concrete
             return _blogDal.GetById(id);
         }
 
-        public List<Blog> TGetList(Expression<Func<Blog, bool>> filter)
+        public List<Blog> TGetList(Expression<Func<Blog, bool>> filter = null)
         {
             return filter == null ?
                 _blogDal.GetListAll() :
@@ -71,7 +71,7 @@ namespace BusinessLayer.Concrete
             _blogDal.Update(t);
         }
 
-        public Blog TGetByFilter(Expression<Func<Blog, bool>> filter)
+        public Blog TGetByFilter(Expression<Func<Blog, bool>> filter = null)
         {
             return filter == null ?
                 _blogDal.GetByFilter() :

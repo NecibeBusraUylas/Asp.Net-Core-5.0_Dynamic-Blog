@@ -10,11 +10,11 @@ namespace Dynamic_Blog.ViewsComponents.Category
 {
     public class CategoryList: ViewComponent
     {
-        CategoryManager cm = new CategoryManager(new EFCategoryRepository());
+        CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
 
         public IViewComponentResult Invoke()
         {
-            var values = cm.TGetList(null);
+            var values = categoryManager.TGetList();
             return View(values);
         }
     }

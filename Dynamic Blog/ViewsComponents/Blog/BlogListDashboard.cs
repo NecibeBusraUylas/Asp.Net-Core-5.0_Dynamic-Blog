@@ -10,10 +10,10 @@ namespace DynamicBlog.ViewsComponents.Blog
 {
     public class BlogListDashboard: ViewComponent
     {
-        BlogManager bm = new BlogManager(new EFBlogRepository());
+        BlogManager blogManager = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = bm.GetBlogListWithCategory();
+            var values = blogManager.GetBlogListWithCategory();
             return View(values);
         }
     }

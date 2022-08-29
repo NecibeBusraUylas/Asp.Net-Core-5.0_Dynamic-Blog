@@ -9,8 +9,9 @@ namespace DynamicBlog.Models
 {
     public class AddProfileImage
     {
-        public void ImageAdd(IFormFile image, out string fileName)
+        public string ImageAdd(IFormFile image, out string fileName)
         {
+            var imageLocation = "";
             var extension = Path.GetExtension(image.FileName);
             var newImageName = Guid.NewGuid() + extension;
             var location = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/WriterImageFiles/",
@@ -18,6 +19,7 @@ namespace DynamicBlog.Models
             var stream = new FileStream(location, FileMode.Create);
             image.CopyTo(stream);
             fileName = image.FileName;
+            return imageLocation= "\\WriterImageFiles\\" + newImageName;
         }
     }
 }

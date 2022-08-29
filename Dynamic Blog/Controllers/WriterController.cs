@@ -11,19 +11,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DynamicBlog.Controllers
 {
-    //[Authorize]
     public class WriterController : Controller
     {
-        WriterManager wm = new WriterManager(new EFWriterRepository());
+        WriterManager writerManager = new WriterManager(new EFWriterRepository());
         WriterCity writerCity = new WriterCity();
 
-        //[Authorize]
         public IActionResult Index()
         {
+            string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
+            string id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
+            ViewBag.id = id;
+            ViewBag.userMail = mail;
+            ViewBag.Name = writerManager.TGetByFilter(x => x.WriterMail == mail).WriterName;
             return View();
         }
 
@@ -37,52 +41,70 @@ namespace DynamicBlog.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult Test()
         {
             return View();
         }
 
-        [AllowAnonymous]
         public PartialViewResult WriterNavbarPartial()
         {
             return PartialView();
         }
 
-        [AllowAnonymous]
         public PartialViewResult WriterFooterPartial()
         {
             return PartialView();
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult WriterEditProfile()
         {
             ViewBag.Cities = writerCity.GetCityList();
-            var writerValues = wm.TGetById(1);
+            var writerValues = writerManager.TGetByFilter(x => x.WriterId == int.Parse(User.Identity.Name));
             return View(writerValues);
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult WriterEditProfile(Writer p, string passwordAgain, IFormFile imageFile)
+        public IActionResult WriterEditProfile(Writer writer, string passwordAgain, IFormFile imageFile)
         {
+            var imgLocation = "";
             WriterValidator validationRules = new WriterValidator();
-            ValidationResult results = validationRules.Validate(p);
-            if (results.IsValid)
+            AddProfileImage addProfileImage = new AddProfileImage();
+            ValidationResult results = validationRules.Validate(writer);
+            var values = writerManager.TGetById(int.Parse(User.Identity.Name));
+            if (results.IsValid && writer.WriterPassword == passwordAgain)
             {
-                wm.TUpdate(p);
+                if (writer.WriterPassword == null)
+                {
+                    writer.WriterPassword = values.WriterPassword;
+                    passwordAgain = writer.WriterPassword;
+                }
+                else if (imageFile == null)
+                {
+                    writer.WriterImage = values.WriterImage;
+                }
+                else if(imageFile != null)
+                {
+                    imgLocation = addProfileImage.ImageAdd(imageFile, out string imageName);
+                    writer.WriterImage = imgLocation;
+                }
+                writer.WriterStatus = values.WriterStatus;
+                writerManager.TUpdate(writer);
                 return RedirectToAction("Index", "Dashboard");
             }
-            else
+            else if (!results.IsValid)
             {
                 foreach (var item in results.Errors)
                 {
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
             }
-            return RedirectToAction("Index", "Dashboard");
+            else if (writer.WriterPassword != passwordAgain && writer.WriterPassword != values.WriterPassword)
+            {
+                ModelState.AddModelError("PasswordAgainMessage","Girdiğiniz parolalar eşleşmedi lütfen tekrar deneyin.");
+            }
+            ViewBag.Cities = writerCity.GetCityList();
+            return View();
         }
     }
 }

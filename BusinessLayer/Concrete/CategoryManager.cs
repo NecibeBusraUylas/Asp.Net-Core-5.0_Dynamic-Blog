@@ -61,7 +61,7 @@ namespace BusinessLayer.Concrete
             return _categoryDal.GetById(id);
         }
 
-        public List<Category> TGetList(Expression<Func<Category, bool>> filter)
+        public List<Category> TGetList(Expression<Func<Category, bool>> filter = null)
         {
             return filter == null ?
                 _categoryDal.GetListAll() :
@@ -75,7 +75,7 @@ namespace BusinessLayer.Concrete
             _categoryDal.Update(t);
         }
 
-        public Category TGetByFilter(Expression<Func<Category, bool>> filter)
+        public Category TGetByFilter(Expression<Func<Category, bool>> filter = null)
         {
             return filter == null ?
                  _categoryDal.GetByFilter() :

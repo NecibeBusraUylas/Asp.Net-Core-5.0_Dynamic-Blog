@@ -31,7 +31,7 @@ namespace BusinessLayer.Concrete
 
         public void TDelete(Writer t)
         {
-            throw new NotImplementedException();
+            _writerDal.Delete(t);
         }
 
         public void TUpdate(Writer t)
@@ -39,7 +39,7 @@ namespace BusinessLayer.Concrete
             _writerDal.Update(t);
         }
 
-        public List<Writer> GetList(Expression<Func<Writer, bool>> filter)
+        public List<Writer> GetList(Expression<Func<Writer, bool>> filter = null)
         {
             return _writerDal.GetListAll(filter);
         }

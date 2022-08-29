@@ -10,10 +10,10 @@ namespace DynamicBlog.ViewsComponents.Blog
 {
     public class WriterLastBlog: ViewComponent
     {
-        BlogManager bm = new BlogManager(new EFBlogRepository());
+        BlogManager blogManager = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = bm.GetBlogByWriter(1);
+            var values = blogManager.GetBlogByWriter(1);
             return View(values);
         }
     }

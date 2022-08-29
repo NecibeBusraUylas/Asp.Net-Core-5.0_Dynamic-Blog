@@ -21,5 +21,9 @@ namespace EntityLayer.Concrete
 
         //relation
         public List<Blog> Blogs { get; set; }
+
+        //relation    - yazatın gönderdiği ve aldığı tüm r
+        public virtual ICollection<Message2> WriterSender { get; set; }
+        public virtual ICollection<Message2> WriterReceiver { get; set; }
     }
 }

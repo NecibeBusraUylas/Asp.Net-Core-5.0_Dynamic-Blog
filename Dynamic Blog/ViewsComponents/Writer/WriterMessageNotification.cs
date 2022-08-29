@@ -4,16 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DynamicBlog.ViewsComponents.Writer
 {
     public class WriterMessageNotification : ViewComponent
     {
-        WriterManager wm = new WriterManager(new EFWriterRepository());
+        Message2Manager message2Manager = new Message2Manager(new EFMessage2Repository());
         public IViewComponentResult Invoke()
         {
-            return View();
+            int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+            var values = message2Manager.TGetReceivingMessageListByWriter(id);
+            if (values.Count() > 3)
+            {
+                values = values.TakeLast(3).ToList();
+            }
+            return View(values);
         }
     }
 }

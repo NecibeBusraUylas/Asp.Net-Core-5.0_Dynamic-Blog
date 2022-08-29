@@ -13,8 +13,8 @@ namespace DynamicBlog.Controllers
         AboutManager aboutManager = new AboutManager(new EFAboutRepository());
         public IActionResult Index()
         {
-            var Values = aboutManager.TGetList(null);
-            return View(Values);
+            var values = aboutManager.TGetList();
+            return View(values);
         }
         public PartialViewResult SocialMediaAbout()
         {

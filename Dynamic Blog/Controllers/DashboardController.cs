@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DynamicBlog.Controllers
@@ -14,11 +15,14 @@ namespace DynamicBlog.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            BlogManager bm = new BlogManager(new EFBlogRepository());
-            CategoryManager cm = new CategoryManager(new EFCategoryRepository());
-            ViewBag.toplamBlogSayisi = bm.TGetList(x => x.BlogStatus == true).Count();
-            ViewBag.yazarinBlogSayisi = bm.GetBlogByWriter(1).Count();
-            ViewBag.kategoriSayisi = cm.TGetList(null).Count();
+            BlogManager blogManager = new BlogManager(new EFBlogRepository());
+            CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
+            WriterManager writerManager = new WriterManager(new EFWriterRepository());
+            string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
+            int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+            ViewBag.toplamBlogSayisi = blogManager.TGetList(x => x.BlogStatus == true).Count();
+            ViewBag.yazarinBlogSayisi = blogManager.GetBlogByWriter(id).Count();
+            ViewBag.kategoriSayisi = categoryManager.TGetList().Count();
             return View();
         }
     }

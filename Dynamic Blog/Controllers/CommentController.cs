@@ -12,7 +12,7 @@ namespace Dynamic_Blog.Controllers
 {
     public class CommentController : Controller
     {
-        CommentManager cm = new CommentManager(new EFCommentRepository());
+        CommentManager commentManager = new CommentManager(new EFCommentRepository());
 
         public IActionResult Index()
         {
@@ -26,18 +26,18 @@ namespace Dynamic_Blog.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult PartialAddComment(Comment p)
+        public PartialViewResult PartialAddComment(Comment comment)
         {
-            p.CommentDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-            p.CommentStatus = true;
-            p.BlogId = 2;
-            cm.TAdd(p);
+            comment.CommentDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+            comment.CommentStatus = true;
+            comment.BlogId = 2;
+            commentManager.TAdd(comment);
             return PartialView();
         }
 
         public PartialViewResult CommentListByBlog(int id)
         {
-            var values = cm.GetList(id);
+            var values = commentManager.GetList(id);
             return PartialView(values);
         }
     }

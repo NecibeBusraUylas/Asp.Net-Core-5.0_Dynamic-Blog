@@ -10,10 +10,10 @@ namespace Dynamic_Blog.Controllers
 {
     public class CategoryController : Controller
     {
-        CategoryManager cm = new CategoryManager(new EFCategoryRepository());
+        CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
         public IActionResult Index()
         {
-            var values = cm.TGetList(null);
+            var values = categoryManager.TGetList();
             return View(values);
         }
     }

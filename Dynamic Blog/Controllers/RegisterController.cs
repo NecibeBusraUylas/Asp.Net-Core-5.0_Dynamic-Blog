@@ -17,7 +17,7 @@ namespace Dynamic_Blog.Controllers
 {
     public class RegisterController : Controller
     {
-        WriterManager wm = new WriterManager(new EFWriterRepository());
+        WriterManager writerManager = new WriterManager(new EFWriterRepository());
         WriterCity writerCity = new WriterCity();
 
         [AllowAnonymous]
@@ -32,17 +32,18 @@ namespace Dynamic_Blog.Controllers
         [HttpPost]
         public IActionResult Index(Writer writer, string passwordAgain, string cities, IFormFile imageFile)
         {
+            var imgLocation = "";
             WriterValidator wv = new WriterValidator();
             AddProfileImage addProfileImage = new AddProfileImage();
             ValidationResult results = wv.Validate(writer);
-            var validateWriter = wm.TGetByFilter(x => x.WriterMail == writer.WriterMail);
+            var validateWriter = writerManager.TGetByFilter(x => x.WriterMail == writer.WriterMail);
             if (results.IsValid && writer.WriterPassword == passwordAgain && validateWriter == null)
             {
                 writer.WriterStatus = true;
                 writer.WriterAbout = "Deneme test";
-                addProfileImage.ImageAdd(imageFile, out string imageName);
-                writer.WriterImage = imageName;
-                wm.TAdd(writer);
+                imgLocation= addProfileImage.ImageAdd(imageFile, out string imageName);
+                writer.WriterImage = imgLocation;
+                writerManager.TAdd(writer);
                 return RedirectToAction("Index", "Blog");
             }
             else if (!results.IsValid)

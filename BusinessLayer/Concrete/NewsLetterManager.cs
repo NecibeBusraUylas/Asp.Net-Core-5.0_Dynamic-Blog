@@ -31,25 +31,26 @@ namespace BusinessLayer.Concrete
 
         public void TDelete(NewsLetter t)
         {
-            throw new NotImplementedException();
+            _newsLetterDal.Delete(t);
         }
 
         public void TUpdate(NewsLetter t)
         {
-            throw new NotImplementedException();
+            _newsLetterDal.Update(t);
         }
 
-        public NewsLetter TGetByFilter(Expression<Func<NewsLetter, bool>> filter)
+        public NewsLetter TGetByFilter(Expression<Func<NewsLetter, bool>> filter = null)
         {
-            return _newsLetterDal.GetByFilter(filter); return filter == null ?
+            return filter == null ?
                  _newsLetterDal.GetByFilter() :
                  _newsLetterDal.GetByFilter(filter);
+        }
 
-            public List<NewsLetter> TGetList(Expression<Func<NewsLetter, bool>> filter = null)
+        public List<NewsLetter> TGetList(Expression<Func<NewsLetter, bool>> filter = null)
         {
-             return filter == null ?
-                 _newsLetterDal.GetListAll() :
-                 _newsLetterDal.GetListAll(filter);
+            return filter == null ?
+                _newsLetterDal.GetListAll() :
+                _newsLetterDal.GetListAll(filter);
         }
     }
 }

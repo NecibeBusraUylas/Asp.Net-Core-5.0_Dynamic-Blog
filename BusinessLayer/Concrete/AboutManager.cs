@@ -21,20 +21,20 @@ namespace BusinessLayer.Concrete
 
         public void TAdd(About t)
         {
-            throw new NotImplementedException();
+            _aboutDal.Add(t);
         }
 
         public void TDelete(About t)
         {
-            throw new NotImplementedException();
+            _aboutDal.Delete(t);
         }
 
         public About TGetById(int id)
         {
-            throw new NotImplementedException();
+            return _aboutDal.GetById(id);
         }
 
-        public List<About> TGetList(Expression<Func<About, bool>> filter)
+        public List<About> TGetList(Expression<Func<About, bool>> filter = null)
         {
             return filter == null ?
                 _aboutDal.GetListAll() :
@@ -43,10 +43,10 @@ namespace BusinessLayer.Concrete
 
         public void TUpdate(About t)
         {
-            throw new NotImplementedException();
+            _aboutDal.Update(t);
         }
 
-        public About TGetByFilter(Expression<Func<About, bool>> filter)
+        public About TGetByFilter(Expression<Func<About, bool>> filter = null)
         {
             return filter == null ?
                 _aboutDal.GetByFilter() :

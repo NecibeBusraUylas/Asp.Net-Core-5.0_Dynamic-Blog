@@ -14,43 +14,44 @@
         <th>Oluşturma Tarihi</th>
         <th>Kategori</th>
         <th>Durum</th>
-        <th>Sil</th>
-        <th>Düzenle</th>
-        <th scope="col">Durumunu Değiştir</th>
+        <th scope="col"> Durumu Değiştir</thscope="col">
+        <th></th>
+        <th></th>
     </tr>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <th>@item.BlogId</th>
-                <td>@item.BlogTitle</td>
-                <td>@(((DateTime)item.BlogCreationDate).ToString("dd-MMM-yyyy"))</td>
-                <td>@item.Category.CategoryName</td>
-                <td>
-                    @if (item.BlogStatus)
-                    {
-                        <span class="badge badge-success">Aktif</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-secondary">Pasif</span>
-                    }
-                </td>
-                <td><a href="/Blog/BlogDelete/@item.BlogId" id="Sil_@item.BlogId" class="btn btn-danger">Sil</a></td>
-                <td><a href="/Blog/BlogEdit/@item.BlogId" class="btn btn-warning">Düzenle</a></td>
-                <td>
+        <tr>
+            <th>@item.BlogId</th>
+            <td>@item.BlogTitle</td>
+            <td>@(((DateTime)item.BlogCreationDate).ToString("dd-MMM-yyyy"))</td>
+            <td>@item.Category.CategoryName</td>
+            <td>
+                @if (item.BlogStatus)
+                {
+                    <span class="badge badge-success">Aktif</span>
+                }
+                else
+                {
+                    <span class="badge badge-secondary">Pasif</span>
+                }
+            </td>
+            <td>
 
-                    @if (item.BlogStatus)
-                    {
-                        <a href="~/Blog/ChangeStatusBlog/@item.BlogId" id="Durum_@item.BlogId" class="btn btn-gradient-secondary">Pasif Yap</a>
-                    }
-                    else
-                    {
-                        <a href="~/Blog/ChangeStatusBlog/@item.BlogId" id="Durum_@item.BlogId" class="btn btn-gradient-success">Aktif Yap</a>
-                    }
+                @if (item.BlogStatus)
+                {
+                    <a href="~/Blog/ChangeStatusBlog/@item.BlogId" id="Durum_@item.BlogId" class="btn btn-gradient-secondary">Pasif Yap</a>
+                }
+                else
+                {
+                    <a href="~/Blog/ChangeStatusBlog/@item.BlogId" id="Durum_@item.BlogId" class="btn btn-gradient-success">Aktif Yap</a>
+                }
 
-                </td>
-                <script>
+            </td>
+            <td><a href="/Blog/BlogDelete/@item.BlogId" id="Sil_@item.BlogId" class="btn btn-danger">Sil</a></td>
+            <td><a href="/Blog/BlogEdit/@item.BlogId" class="btn btn-warning">Düzenle</a></td>
+
+            <script>
                                     $('#Sil_@item.BlogId').click(function (e) {
                                         e.preventDefault();
                                         var linkURL = $(this).attr("href");
@@ -114,9 +115,10 @@
                                             }
                                         })
                                     });
-                </script>
-            </tr>
+            </script>
+        </tr>
         }
     </tbody>
 </table>
+<br />
 <a href="/Blog/BlogAdd/" class="btn btn-primary">Yeni Blog Oluştur</a>
