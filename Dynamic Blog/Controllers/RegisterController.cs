@@ -41,8 +41,8 @@ namespace Dynamic_Blog.Controllers
             {
                 writer.WriterStatus = true;
                 writer.WriterAbout = "Deneme test";
-                imgLocation= addProfileImage.ImageAdd(imageFile, out string imageName);
-                writer.WriterImage = imgLocation;
+                addProfileImage.ImageAdd(imageFile, out string imageName);
+                writer.WriterImage = imageName;
                 writerManager.TAdd(writer);
                 return RedirectToAction("Index", "Blog");
             }

@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
 using DataAccessLayer.EntityFramework;
+using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,8 @@ namespace Dynamic_Blog.Controllers
         BlogManager blogManager = new BlogManager(new EFBlogRepository());
         WriterManager writerManager = new WriterManager(new EFWriterRepository());
         CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
+        GetUserInfo userInfo = new GetUserInfo();
+
         public IActionResult Index()
         {
             var values = blogManager.GetBlogListWithCategory();
@@ -32,8 +35,7 @@ namespace Dynamic_Blog.Controllers
 
         public IActionResult BlogListByWriter() 
         {
-            int id = writerManager.TGetByFilter(x => x.WriterMail == User.Identity.Name).WriterId;
-            var values = blogManager.GetListWithCategoryByWriter(id);
+            var values = blogManager.GetListWithCategoryByWriter(userInfo.GetId(User));
             return View(values);
         }
 
@@ -64,7 +66,7 @@ namespace Dynamic_Blog.Controllers
             {
                 blog.BlogStatus = true;
                 blog.BlogCreationDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                blog.WriterId = writerManager.TGetByFilter(x => x.WriterMail == User.Identity.Name).WriterId;
+                blog.WriterId = userInfo.GetId(User);
                 blogManager.TAdd(blog);
                 return RedirectToAction("BlogListByWriter", "Blog");
             }
@@ -134,7 +136,7 @@ namespace Dynamic_Blog.Controllers
             if (results.IsValid)
             {
                 var value = blogManager.TGetById(blog.BlogId);
-                blog.WriterId = writerManager.TGetByFilter(x => x.WriterMail == User.Identity.Name).WriterId;
+                blog.WriterId = userInfo.GetId(User);
                 blog.BlogId = value.BlogId;
                 blog.BlogCreationDate = value.BlogCreationDate;
                 blog.BlogStatus = true;

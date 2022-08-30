@@ -20,6 +20,7 @@ namespace DynamicBlog.Controllers
     {
         WriterManager writerManager = new WriterManager(new EFWriterRepository());
         WriterCity writerCity = new WriterCity();
+        GetUserInfo userInfo = new GetUserInfo();
 
         public IActionResult Index()
         {
@@ -60,18 +61,22 @@ namespace DynamicBlog.Controllers
         public IActionResult WriterEditProfile()
         {
             ViewBag.Cities = writerCity.GetCityList();
-            var writerValues = writerManager.TGetByFilter(x => x.WriterId == int.Parse(User.Identity.Name));
+            var writerValues = writerManager.TGetByFilter(x => x.WriterId == userInfo.GetId(User));
             return View(writerValues);
         }
 
         [HttpPost]
         public IActionResult WriterEditProfile(Writer writer, string passwordAgain, IFormFile imageFile)
         {
-            var imgLocation = "";
             WriterValidator validationRules = new WriterValidator();
             AddProfileImage addProfileImage = new AddProfileImage();
+            var values = writerManager.TGetById(userInfo.GetId(User));
+            if (writer.WriterPassword == null)
+            {
+                writer.WriterPassword = values.WriterPassword;
+                passwordAgain = writer.WriterPassword;
+            }
             ValidationResult results = validationRules.Validate(writer);
-            var values = writerManager.TGetById(int.Parse(User.Identity.Name));
             if (results.IsValid && writer.WriterPassword == passwordAgain)
             {
                 if (writer.WriterPassword == null)
@@ -85,8 +90,8 @@ namespace DynamicBlog.Controllers
                 }
                 else if(imageFile != null)
                 {
-                    imgLocation = addProfileImage.ImageAdd(imageFile, out string imageName);
-                    writer.WriterImage = imgLocation;
+                    addProfileImage.ImageAdd(imageFile, out string fileName);
+                    writer.WriterImage = fileName;
                 }
                 writer.WriterStatus = values.WriterStatus;
                 writerManager.TUpdate(writer);
