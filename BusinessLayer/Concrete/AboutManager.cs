@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete
 {
-    public class AboutManager : IAboutServive
+    public class AboutManager : IAboutService
     {
-        IAboutDal _aboutDal;
+        private readonly IAboutDal _aboutDal;
 
         public AboutManager(IAboutDal aboutDal)
         {
@@ -51,6 +51,13 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                 _aboutDal.GetByFilter() :
                 _aboutDal.GetByFilter(filter);
+        }
+
+        public int TGetCount(Expression<Func<About, bool>> filter = null)
+        {
+            return filter == null ?
+                 _aboutDal.GetCount() :
+                 _aboutDal.GetCount(filter);
         }
     }
 }

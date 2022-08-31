@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class NewsLetterManager : INewsLetterService
     {
-        INewsLetterDal _newsLetterDal;
+        private readonly INewsLetterDal _newsLetterDal;
 
         public NewsLetterManager(INewsLetterDal newsLetterDal)
         {
@@ -51,6 +51,13 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                 _newsLetterDal.GetListAll() :
                 _newsLetterDal.GetListAll(filter);
+        }
+
+        public int TGetCount(Expression<Func<NewsLetter, bool>> filter = null)
+        {
+            return filter == null ?
+               _newsLetterDal.GetCount() :
+               _newsLetterDal.GetCount();
         }
     }
 }

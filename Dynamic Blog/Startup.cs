@@ -1,3 +1,10 @@
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using BusinessLayer.ValidationRules;
+using DataAccessLayer.Abstract;
+using DataAccessLayer.EntityFramework;
+using DynamicBlog.Models;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -46,6 +53,31 @@ namespace Dynamic_Blog
                    x.LoginPath = "/Login/Index";
                }
            );
+
+            services.AddSingleton<IAboutService>(new AboutManager(new EFAboutRepository()));
+
+            services.AddSingleton<IBlogService>(new BlogManager(new EFBlogRepository()));
+
+            services.AddSingleton<ICategoryService>(new CategoryManager(new EFCategoryRepository()));
+
+            services.AddSingleton<ICommentService>(new CommentManager(new EFCommentRepository()));
+
+            services.AddSingleton<IContactService>(new ContactManager(new EFContactRepository()));
+
+            services.AddSingleton<IMessage2Service>(new Message2Manager(new EFMessage2Repository()));
+
+            services.AddSingleton<INewsLetterService>(new NewsLetterManager(new EFNewsLetterRepository()));
+
+            services.AddSingleton<INotificationService>(new NotificationManager(new EFNotificationRepository()));
+
+            services.AddSingleton<IWriterService>(new WriterManager(new EFWriterRepository()));
+
+            services.AddSingleton<IAdminService>(new AdminManager(new EFAdminRepository()));
+
+            services.AddSingleton(new GetUserInfo());
+
+            services.AddControllersWithViews().AddFluentValidation(x =>
+            x.RegisterValidatorsFromAssemblyContaining<BlogValidator>());
 
             //services.AddSession(); //session
         }

@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DynamicBlog.ViewsComponents.Blog
+namespace DynamicBlog.ViewComponents.Blog
 {
-    public class WriterLastBlog: ViewComponent
+    public class BlogLast3Posts: ViewComponent
     {
         BlogManager blogManager = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = blogManager.GetBlogByWriter(1);
+            var values = blogManager.GetLastPosts(3);
             return View(values);
         }
     }

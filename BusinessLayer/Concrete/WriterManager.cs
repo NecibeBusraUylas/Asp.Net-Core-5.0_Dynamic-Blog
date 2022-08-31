@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class WriterManager : IWriterService
     {
-        IWriterDal _writerDal;
+        private readonly IWriterDal _writerDal;
 
         public WriterManager(IWriterDal writerDal)
         {
@@ -43,6 +43,14 @@ namespace BusinessLayer.Concrete
         {
             return _writerDal.GetListAll(filter);
         }
+
+        public int TGetCount(Expression<Func<Writer, bool>> filter = null)
+        {
+            return filter == null ?
+                _writerDal.GetCount() :
+                _writerDal.GetCount();
+        }
+
 
         public List<Writer> GetWriterById(int id)
         {

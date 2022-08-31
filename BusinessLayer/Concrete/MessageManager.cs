@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class MessageManager : IMessageService
     {
-        IMessageDal _messageDal;
+        private readonly IMessageDal _messageDal;
 
         public MessageManager(IMessageDal messageDal)
         {
@@ -42,7 +42,12 @@ namespace BusinessLayer.Concrete
                  _messageDal.GetByFilter() :
                  _messageDal.GetByFilter(filter);
         }
-  
+
+        public int GetCount(Expression<Func<Message, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Message TGetById(int id)
         {
             return _messageDal.GetById(id);
@@ -51,6 +56,13 @@ namespace BusinessLayer.Concrete
         public void TUpdate(Message t)
         {
             _messageDal.Update(t);
+        }
+
+        public int TGetCount(Expression<Func<Message, bool>> filter = null)
+        {
+            return filter == null ?
+                 _messageDal.GetCount() :
+                 _messageDal.GetCount(filter);
         }
     }
 }

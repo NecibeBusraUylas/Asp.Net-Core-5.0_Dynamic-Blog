@@ -20,9 +20,9 @@ namespace DynamicBlog.Controllers
             WriterManager writerManager = new WriterManager(new EFWriterRepository());
             string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
             int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
-            ViewBag.toplamBlogSayisi = blogManager.TGetList(x => x.BlogStatus == true).Count();
-            ViewBag.yazarinBlogSayisi = blogManager.GetBlogByWriter(id).Count();
-            ViewBag.kategoriSayisi = categoryManager.TGetList().Count();
+            ViewBag.totalBlogCount = blogManager.TGetList(x => x.BlogStatus == true).Count();
+            ViewBag.writerBlogCount = blogManager.GetBlogByWriter(id).Count();
+            ViewBag.categoryCount = categoryManager.TGetList().Count();
             return View();
         }
     }

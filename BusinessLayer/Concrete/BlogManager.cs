@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class BlogManager : IBlogService
     {
-        IBlogDal _blogDal;
+        private readonly IBlogDal _blogDal;
 
         public BlogManager(IBlogDal blogDal)
         {
@@ -76,6 +76,13 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                 _blogDal.GetByFilter() :
                 _blogDal.GetByFilter(filter);
+        }
+
+        public int TGetCount(Expression<Func<Blog, bool>> filter = null)
+        {
+            return filter == null ?
+               _blogDal.GetCount() :
+               _blogDal.GetCount();
         }
     }
 }

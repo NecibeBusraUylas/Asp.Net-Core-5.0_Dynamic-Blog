@@ -36,8 +36,8 @@ namespace DataAccessLayer.Repositories
             using (var c = new Context())
             {
                 return filter == null ?
-                    c.Set<T>().ToList() ://null ise
-                    c.Set<T>().Where(filter).ToList();//null değilse
+                    c.Set<T>().ToList() :
+                    c.Set<T>().Where(filter).ToList();
             }
         }
 
@@ -56,6 +56,15 @@ namespace DataAccessLayer.Repositories
             using var c = new Context();
             c.Update(t);
             c.SaveChanges();
+        }
+
+        public int GetCount(Expression<Func<T, bool>> filter = null)
+        {
+            using var c = new Context();
+            if (filter == null)
+                return c.Set<T>().Count();
+            else
+                return c.Set<T>().Where(filter).Count();
         }
     }
 }

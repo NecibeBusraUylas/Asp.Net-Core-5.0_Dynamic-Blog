@@ -32,7 +32,6 @@ namespace Dynamic_Blog.Controllers
         [HttpPost]
         public IActionResult Index(Writer writer, string passwordAgain, string cities, IFormFile imageFile)
         {
-            var imgLocation = "";
             WriterValidator wv = new WriterValidator();
             AddProfileImage addProfileImage = new AddProfileImage();
             ValidationResult results = wv.Validate(writer);

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace DynamicBlog.ViewsComponents.Writer
+namespace DynamicBlog.ViewComponents.Writer
 {
     public class WriterMessageNotification : ViewComponent
     {

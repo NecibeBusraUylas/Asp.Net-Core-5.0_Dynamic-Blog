@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class Message2Manager : IMessage2Service
     {
-        IMessage2Dal _message2Dal;
+        private readonly IMessage2Dal _message2Dal;
 
         public Message2Manager(IMessage2Dal message2Dal)
         {
@@ -56,6 +56,13 @@ namespace BusinessLayer.Concrete
         public List<Message2> TGetReceivingMessageListByWriter(int id)
         {
             return _message2Dal.GetReceivingMessageListByWriter(id);
+        }
+
+        public int TGetCount(Expression<Func<Message2, bool>> filter = null)
+        {
+            return filter == null ?
+               _message2Dal.GetCount() :
+               _message2Dal.GetCount();
         }
     }
 }

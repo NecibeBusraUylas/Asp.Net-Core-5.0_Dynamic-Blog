@@ -12,7 +12,7 @@ namespace BusinessLayer.Concrete
 {
     public class CommentManager : ICommentService
     {
-        ICommentDal _commentDal;
+        private readonly ICommentDal _commentDal;
 
         public CommentManager(ICommentDal commentDal)
         {
@@ -56,6 +56,13 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                 _commentDal.GetListAll() :
                 _commentDal.GetListAll(filter);
+        }
+
+        public int TGetCount(Expression<Func<Comment, bool>> filter = null)
+        {
+            return filter == null ?
+               _commentDal.GetCount() :
+               _commentDal.GetCount();
         }
     }
 }

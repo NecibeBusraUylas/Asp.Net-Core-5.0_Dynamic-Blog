@@ -12,7 +12,8 @@ namespace BusinessLayer.Concrete
 {
     public class NotificationManager : INotificationService
     {
-        INotificationDal _notificationDal;
+        private readonly INotificationDal _notificationDal;
+
 
         public NotificationManager(INotificationDal notificationDal)
         {
@@ -42,6 +43,10 @@ namespace BusinessLayer.Concrete
                  _notificationDal.GetByFilter() :
                  _notificationDal.GetByFilter(filter);
         }
+        public int GetCount(Expression<Func<Notification, bool>> filter = null)
+        {
+            return _notificationDal.GetCount(filter);
+        }
 
         public Notification TGetById(int id)
         {
@@ -51,6 +56,13 @@ namespace BusinessLayer.Concrete
         public void TUpdate(Notification t)
         {
             _notificationDal.Update(t);
+        }
+
+        public int TGetCount(Expression<Func<Notification, bool>> filter = null)
+        {
+            return filter == null ?
+               _notificationDal.GetCount() :
+               _notificationDal.GetCount();
         }
     }
 }

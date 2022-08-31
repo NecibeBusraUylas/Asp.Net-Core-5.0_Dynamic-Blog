@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Dynamic_Blog.ViewsComponents.Category
+namespace DynamicBlog.ViewComponents.Category
 {
-    public class CategoryList: ViewComponent
+    public class CategoryListDashboard : ViewComponent
     {
         CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
 

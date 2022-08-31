@@ -19,7 +19,7 @@ namespace BusinessLayer.Concrete
         //    categoryRepository = new EFCategoryRepository();
         //}
 
-        ICategoryDal _categoryDal;
+        private readonly ICategoryDal _categoryDal;
 
         public CategoryManager(ICategoryDal categoryDal)
         {
@@ -80,6 +80,13 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                  _categoryDal.GetByFilter() :
                  _categoryDal.GetByFilter(filter);
+        }
+
+        public int TGetCount(Expression<Func<Category, bool>> filter = null)
+        {
+            return filter == null ?
+               _categoryDal.GetCount() :
+               _categoryDal.GetCount();
         }
     }
 }
