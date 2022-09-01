@@ -12,14 +12,15 @@
     <meta name="keywords" content="Web Blog Web Site" />
 
     <script>
-		addEventListener("load", function () {
-			setTimeout(hideURLbar, 0);
-		}, false);
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
 
-		function hideURLbar() {
-			window.scrollTo(0, 1);
-		}
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
     </script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <link href="~/CoreBlogTema/css/bootstrap.css" rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="~/CoreBlogTema/css/single.css">
     <link href="~/CoreBlogTema/css/style.css" rel='stylesheet' type='text/css' />
@@ -29,8 +30,6 @@
 </head>
 
 <body>
-    <!--Header-->
-
     <header>
         <div class="top-bar_sub_w3layouts container-fluid">
             <div class="row">
@@ -40,7 +39,7 @@
                         <i class="fab fa-linode"></i> Weblog
                     </a>
                 </div>
-                @await Html.PartialAsync("Partial2")  <!--Partial2 call--> 
+                @await Html.PartialAsync("Partial2")  <!--Partial2 call-->
                 <div class="col-md-4 log-icons text-right">
 
                     <ul class="social_list1 mt-3">
@@ -73,12 +72,11 @@
         </div>
         @await Html.PartialAsync("Partial1")    <!--partial1 call -->
     </header>
-    <!--//header-->
     <!--/main-->
     @RenderBody()
     <!--//main-->
     <!--footer-->
-     @await Html.PartialAsync("Partial3") <!-- Partial3 call-->
+    @await Html.PartialAsync("Partial3") <!-- Partial3 call-->
     <!---->
     <!-- js -->
     <script src="~/CoreBlogTema/js/jquery-2.2.3.min.js"></script>
@@ -122,6 +120,19 @@
     <!-- //Custom-JavaScript-File-Links -->
     <script src="~/CoreBlogTema/js/bootstrap.js"></script>
 
+    <script>
+        $("#btnSubscribe").click(function () {
+            let mail = $("#SubscribeNewsLetterEmail").val();
+            $.ajax({
+                type: "Post",
+                url: "/NewsLetter/SubscribeMail",
+                data: mail,
+                success: function (func) {
+                    let result = jQuery.parseJSON(func);
+                    alert("Mail bültenimize abone oldunuz, teşekkürler.");
+                }
+            })
+        })
+    </script>
 </body>
-
 </html>

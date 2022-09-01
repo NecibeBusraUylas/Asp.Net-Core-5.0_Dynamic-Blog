@@ -69,7 +69,6 @@ namespace DynamicBlog.Controllers
         public IActionResult WriterEditProfile(Writer writer, string passwordAgain, IFormFile imageFile)
         {
             WriterValidator validationRules = new WriterValidator();
-            AddProfileImage addProfileImage = new AddProfileImage();
             var values = writerManager.TGetById(userInfo.GetId(User));
             if (writer.WriterPassword == null)
             {
@@ -90,8 +89,7 @@ namespace DynamicBlog.Controllers
                 }
                 else if(imageFile != null)
                 {
-                    addProfileImage.ImageAdd(imageFile, out string fileName);
-                    writer.WriterImage = fileName;
+                    writer.WriterImage = AddProfileImage.ImageAdd(imageFile);
                 }
                 writer.WriterStatus = values.WriterStatus;
                 writerManager.TUpdate(writer);

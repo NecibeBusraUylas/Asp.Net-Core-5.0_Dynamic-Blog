@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,20 +12,24 @@ namespace DynamicBlog.Controllers
     [AllowAnonymous]
     public class NewsLetterController : Controller
     {
-        NewsLetterManager newsLetterManager = new NewsLetterManager(new EFNewsLetterRepository());
+        private readonly INewsLetterService _newsLetterService;
 
         [HttpGet]
-        public PartialViewResult SubscribeMail()
+        public IActionResult SubscribeMail()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
-        public PartialViewResult SubscribeMail(NewsLetter newsLetter)
+        public IActionResult SubscribeMail(NewsLetter newsLetter)
         {
-            newsLetter.MailStatus = true;
-            newsLetterManager.TAdd(newsLetter);
-            return PartialView();
+            if (_newsLetterService.TGetByMail(newsLetter.Mail) == null)
+            {
+                newsLetter.MailStatus = true;
+                _newsLetterService.TAdd(newsLetter);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

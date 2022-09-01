@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="chartDiv" style="width:800px; height:600px">
+            <h2>Chart Alanı</h2>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['CoreChart'] });
+    google.charts.setOnLoadCallback(DrawonLoad); //fonksiyon çağrıldığı zaman çizme işlemi başlayacak
+    function DrawonLoad() {
+        $(function () {
+            $.ajax({
+                type: 'GET', //get methoduyla çalışacak
+                url: '/Admin/Chart/CategoryChart', // çalışınca bu adrese git
+                success: function (chartsdata) { // çağrı başarılı olursa chart data fonk. çalıştır
+                    var Data = chartsdata.jsonlist; // objeden json listesini çekme
+                    var dataVirtualization = new google.visualization.DataTable(); // görselleştirme için gerekli atama
+                    // grafiğe categoryName ve isimli categoryCount 2 sütun ekledi
+                    dataVirtualization.addColumn('string', 'categoryName');
+                    dataVirtualization.addColumn('number', 'categoryCount');
+                    for (var i = 0; i < Data.length; i++){
+                        dataVirtualization.addRow([Data[i].categoryName, Data[i].categoryCount]); // her bir data için verilerin satırlara çekilmesi
+                    }
+                    var chart = new google.visualization.PieChart(document.getElementById('chartDiv')); // chart!ın çizilmesi
+                    // chart'ın ekrana basılması
+                    chart.draw(dataVirtualization,
+                    {
+                        title: "Weblog Google Chart Projesi",
+                        position: "top",
+                        fontsize:"16px"
+                    });
+                }
+            });
+        });
+    }
+</script>

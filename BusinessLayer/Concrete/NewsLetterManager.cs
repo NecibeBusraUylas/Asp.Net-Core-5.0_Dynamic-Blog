@@ -59,5 +59,10 @@ namespace BusinessLayer.Concrete
                _newsLetterDal.GetCount() :
                _newsLetterDal.GetCount();
         }
+
+        public NewsLetter TGetByMail(string mail)
+        {
+            return _newsLetterDal.GetByFilter(x => x.Mail == mail);
+        }
     }
 }

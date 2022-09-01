@@ -13,7 +13,7 @@ namespace DynamicBlog.ViewComponents.Blog
         BlogManager blogManager = new BlogManager(new EFBlogRepository());
         public IViewComponentResult Invoke()
         {
-            var values = blogManager.GetBlogListWithCategory();
+            var values = blogManager.GetBlogListWithCategory().TakeLast(10).ToList();
             return View(values);
         }
     }
