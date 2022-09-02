@@ -1,6 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
 using BusinessLayer.ValidationRules;
-using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +14,17 @@ namespace DynamicBlog.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
+        private readonly ICategoryService _categoryService;
+
+        public CategoryController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
         public IActionResult Index(int page = 1)
         {
             // ToPagedList parametreleri (başlangıç sayfası, her sayfada kaç değer)
-            var values = categoryManager.TGetList().ToPagedList(page, 3);
+            var values = _categoryService.TGetList().ToPagedList(page, 3);
             return View(values);
         }
 
@@ -37,7 +42,7 @@ namespace DynamicBlog.Areas.Admin.Controllers
             if (results.IsValid)
             {
                 category.CategoryStatus = true;
-                categoryManager.TAdd(category);
+                _categoryService.TAdd(category);
                 return RedirectToAction("Index","Category");
             }
             else
@@ -52,8 +57,8 @@ namespace DynamicBlog.Areas.Admin.Controllers
 
         public IActionResult CategoryDelete(int id)
         {
-            var value = categoryManager.TGetById(id);
-            categoryManager.TDelete(value);
+            var value = _categoryService.TGetById(id);
+            _categoryService.TDelete(value);
             return RedirectToAction("Index","Category");
         }
     }

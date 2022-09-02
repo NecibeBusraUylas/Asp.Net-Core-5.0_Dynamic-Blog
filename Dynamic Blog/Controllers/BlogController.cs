@@ -1,6 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
 using BusinessLayer.ValidationRules;
-using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
@@ -16,33 +15,42 @@ namespace Dynamic_Blog.Controllers
 {
     public class BlogController : Controller
     {
-        BlogManager blogManager = new BlogManager(new EFBlogRepository());
-        WriterManager writerManager = new WriterManager(new EFWriterRepository());
-        CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
-        GetUserInfo userInfo = new GetUserInfo();
+        private readonly IBlogService _blogService;
+        private readonly ICategoryService _categoryService;
+        private readonly IWriterService _writerService;
+        private readonly GetUserInfo _userInfo;
+
+        public BlogController(IBlogService blogService, ICategoryService categoryService, IWriterService writerService, GetUserInfo userInfo)
+        {
+            _blogService = blogService;
+            _categoryService = categoryService;
+            _writerService = writerService;
+            _userInfo = userInfo;
+        }
 
         public IActionResult Index()
         {
-            var values = blogManager.GetBlogListWithCategory();
+            var values = _blogService.TGetBlogListWithCategory();
             return View(values);
         }
         public IActionResult BlogDetails(int id) 
         {
             ViewBag.i = id;
-            var values = blogManager.GetBlogById(id);
+            var values = _blogService.TGetBlogById(id);
             return View(values);
         }
 
         public IActionResult BlogListByWriter() 
         {
-            var values = blogManager.GetListWithCategoryByWriter(userInfo.GetId(User));
+            int id = _userInfo.GetId(User);
+            var values = _blogService.TGetListWithCategoryByWriter(id);
             return View(values);
         }
 
         [HttpGet]
         public IActionResult BlogAdd()
         {
-            List<SelectListItem> categoryValues = (from x in categoryManager.TGetList()
+            List<SelectListItem> categoryValues = (from x in _categoryService.TGetList()
                                                   select new SelectListItem
                                                   {
                                                       Text= x.CategoryName,
@@ -66,8 +74,8 @@ namespace Dynamic_Blog.Controllers
             {
                 blog.BlogStatus = true;
                 blog.BlogCreationDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                blog.WriterId = userInfo.GetId(User);
-                blogManager.TAdd(blog);
+                blog.WriterId = _userInfo.GetId(User);
+                _blogService.TAdd(blog);
                 return RedirectToAction("BlogListByWriter", "Blog");
             }
             else
@@ -77,7 +85,7 @@ namespace Dynamic_Blog.Controllers
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
             }
-            List<SelectListItem> categoryValues = (from x in categoryManager.TGetList()
+            List<SelectListItem> categoryValues = (from x in _categoryService.TGetList()
                                                    select new SelectListItem
                                                    {
                                                        Text = x.CategoryName,
@@ -94,14 +102,14 @@ namespace Dynamic_Blog.Controllers
 
         public IActionResult BlogDelete(int id)
         {
-            var blogValue = blogManager.TGetById(id);
-            blogManager.TDelete(blogValue);
+            var blogValue = _blogService.TGetById(id);
+            _blogService.TDelete(blogValue);
             return RedirectToAction("BlogListByWriter");
         }
 
         public IActionResult ChangeStatusBlog(int id)
         {
-            var blogValue = blogManager.TGetById(id);
+            var blogValue = _blogService.TGetById(id);
             if (blogValue.BlogStatus)
             {
                 blogValue.BlogStatus = false;
@@ -110,15 +118,15 @@ namespace Dynamic_Blog.Controllers
             {
                 blogValue.BlogStatus = true;
             }
-            blogManager.TUpdate(blogValue);
+            _blogService.TUpdate(blogValue);
             return RedirectToAction("BlogListByWriter");
         }
 
         [HttpGet]
         public IActionResult BlogEdit(int id)
         {
-            var blogValue = blogManager.TGetById(id);
-            List<SelectListItem> categoryValues = (from x in categoryManager.TGetList()
+            var blogValue = _blogService.TGetById(id);
+            List<SelectListItem> categoryValues = (from x in _categoryService.TGetList()
                                                    select new SelectListItem
                                                    {
                                                        Text = x.CategoryName,
@@ -135,12 +143,12 @@ namespace Dynamic_Blog.Controllers
             ValidationResult results = blogValidator.Validate(blog);
             if (results.IsValid)
             {
-                var value = blogManager.TGetById(blog.BlogId);
-                blog.WriterId = userInfo.GetId(User);
+                var value = _blogService.TGetById(blog.BlogId);
+                blog.WriterId = _userInfo.GetId(User);
                 blog.BlogId = value.BlogId;
                 blog.BlogCreationDate = value.BlogCreationDate;
                 blog.BlogStatus = true;
-                blogManager.TUpdate(blog);
+                _blogService.TUpdate(blog);
             }
             else
             {

@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,10 +9,16 @@ namespace DynamicBlog.ViewComponents.Blog
 {
     public class BlogListDashboard: ViewComponent
     {
-        BlogManager blogManager = new BlogManager(new EFBlogRepository());
+        private readonly IBlogService _blogService;
+
+        public BlogListDashboard(IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
+
         public IViewComponentResult Invoke()
         {
-            var values = blogManager.GetBlogListWithCategory().TakeLast(10).ToList();
+            var values = _blogService.TGetBlogListWithCategory().TakeLast(10).ToList();
             return View(values);
         }
     }

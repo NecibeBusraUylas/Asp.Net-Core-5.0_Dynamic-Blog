@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,10 +11,16 @@ namespace Dynamic_Blog.ViewComponents.Comments
 {
     public class CommentListByBlog: ViewComponent
     {
-        CommentManager commentManager = new CommentManager(new EFCommentRepository());
+        private readonly ICommentService _commentService;
+
+        public CommentListByBlog(ICommentService commentService)
+        {
+            _commentService = commentService;
+        }
+
         public IViewComponentResult Invoke(int id)
         {
-            var values = commentManager.GetList(id);
+            var values = _commentService.TGetList(id);
             return View(values);
         }
     }

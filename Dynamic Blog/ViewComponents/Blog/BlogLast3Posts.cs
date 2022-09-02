@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,10 +11,16 @@ namespace DynamicBlog.ViewComponents.Blog
 {
     public class BlogLast3Posts: ViewComponent
     {
-        BlogManager blogManager = new BlogManager(new EFBlogRepository());
+        private readonly IBlogService _blogService;
+
+        public BlogLast3Posts(IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
+
         public IViewComponentResult Invoke()
         {
-            var values = blogManager.GetLastPosts(3);
+            var values = _blogService.TGetLastBlogs(3);
             return View(values);
         }
     }

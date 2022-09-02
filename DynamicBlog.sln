@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreLayer", "CoreLayer\CoreLayer.csproj", "{90FC2184-2EDF-485D-BFC8-B1FE3766AB6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBlogAPI", "DynamicBlogAPI\DynamicBlogAPI.csproj", "{3B5E4A19-B128-493E-9FF3-B35620FD7EFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicBlogAPI", "WebAPI\DynamicBlogAPI.csproj", "{58334B79-1626-480E-A0CE-28858CDCE86C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{90FC2184-2EDF-485D-BFC8-B1FE3766AB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90FC2184-2EDF-485D-BFC8-B1FE3766AB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90FC2184-2EDF-485D-BFC8-B1FE3766AB6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B5E4A19-B128-493E-9FF3-B35620FD7EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B5E4A19-B128-493E-9FF3-B35620FD7EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B5E4A19-B128-493E-9FF3-B35620FD7EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B5E4A19-B128-493E-9FF3-B35620FD7EFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58334B79-1626-480E-A0CE-28858CDCE86C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58334B79-1626-480E-A0CE-28858CDCE86C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58334B79-1626-480E-A0CE-28858CDCE86C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58334B79-1626-480E-A0CE-28858CDCE86C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
 using BusinessLayer.ValidationRules;
-using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
@@ -18,9 +17,16 @@ namespace DynamicBlog.Controllers
 {
     public class WriterController : Controller
     {
-        WriterManager writerManager = new WriterManager(new EFWriterRepository());
-        WriterCity writerCity = new WriterCity();
-        GetUserInfo userInfo = new GetUserInfo();
+        private readonly IWriterService _writerService;
+        private readonly GetUserInfo _userInfo;
+        private readonly WriterCity _writerCity;
+
+        public WriterController(IWriterService writerService, GetUserInfo userInfo, WriterCity writerCity)
+        {
+            _writerService = writerService;
+            _userInfo = userInfo;
+            _writerCity = writerCity;
+        }
 
         public IActionResult Index()
         {
@@ -28,7 +34,7 @@ namespace DynamicBlog.Controllers
             string id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
             ViewBag.id = id;
             ViewBag.userMail = mail;
-            ViewBag.Name = writerManager.TGetByFilter(x => x.WriterMail == mail).WriterName;
+            ViewBag.Name = _writerService.TGetByFilter(x => x.WriterMail == mail).WriterName;
             return View();
         }
 
@@ -60,8 +66,8 @@ namespace DynamicBlog.Controllers
         [HttpGet]
         public IActionResult WriterEditProfile()
         {
-            ViewBag.Cities = writerCity.GetCityList();
-            var writerValues = writerManager.TGetByFilter(x => x.WriterId == userInfo.GetId(User));
+            ViewBag.Cities = _writerCity.GetCityList();
+            var writerValues = _writerService.TGetByFilter(x => x.WriterId == _userInfo.GetId(User));
             return View(writerValues);
         }
 
@@ -69,7 +75,7 @@ namespace DynamicBlog.Controllers
         public IActionResult WriterEditProfile(Writer writer, string passwordAgain, IFormFile imageFile)
         {
             WriterValidator validationRules = new WriterValidator();
-            var values = writerManager.TGetById(userInfo.GetId(User));
+            var values = _writerService.TGetById(_userInfo.GetId(User));
             if (writer.WriterPassword == null)
             {
                 writer.WriterPassword = values.WriterPassword;
@@ -92,7 +98,7 @@ namespace DynamicBlog.Controllers
                     writer.WriterImage = AddProfileImage.ImageAdd(imageFile);
                 }
                 writer.WriterStatus = values.WriterStatus;
-                writerManager.TUpdate(writer);
+                _writerService.TUpdate(writer);
                 return RedirectToAction("Index", "Dashboard");
             }
             else if (!results.IsValid)
@@ -106,7 +112,7 @@ namespace DynamicBlog.Controllers
             {
                 ModelState.AddModelError("PasswordAgainMessage","Girdiğiniz parolalar eşleşmedi lütfen tekrar deneyin.");
             }
-            ViewBag.Cities = writerCity.GetCityList();
+            ViewBag.Cities = _writerCity.GetCityList();
             return View();
         }
     }

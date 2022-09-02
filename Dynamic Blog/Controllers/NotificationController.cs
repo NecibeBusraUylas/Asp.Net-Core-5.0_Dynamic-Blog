@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +10,13 @@ namespace DynamicBlog.Controllers
 {
     public class NotificationController : Controller
     {
-        NotificationManager notificationManager = new NotificationManager(new EFNotificationRepository());
+        private readonly INotificationService _notificationService;
+
+        public NotificationController(INotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
+
 
         public IActionResult Index()
         {
@@ -21,7 +26,7 @@ namespace DynamicBlog.Controllers
         [AllowAnonymous]
         public IActionResult AllNotifications()
         {
-            var values = notificationManager.TGetList();
+            var values = _notificationService.TGetList();
             return View(values);
         }
     }

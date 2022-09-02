@@ -1,6 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.Abstract;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +10,12 @@ namespace Dynamic_Blog.Controllers
 {
     public class CommentController : Controller
     {
-        CommentManager commentManager = new CommentManager(new EFCommentRepository());
+        private readonly ICommentService _commentService;
+
+        public CommentController(ICommentService commentService)
+        {
+            _commentService = commentService;
+        }
 
         public IActionResult Index()
         {
@@ -31,13 +34,13 @@ namespace Dynamic_Blog.Controllers
             comment.CommentDate = DateTime.Parse(DateTime.Now.ToShortDateString());
             comment.CommentStatus = true;
             comment.BlogId = 2;
-            commentManager.TAdd(comment);
+            _commentService.TAdd(comment);
             return PartialView();
         }
 
         public PartialViewResult CommentListByBlog(int id)
         {
-            var values = commentManager.GetList(id);
+            var values = _commentService.GetList(id);
             return PartialView(values);
         }
     }

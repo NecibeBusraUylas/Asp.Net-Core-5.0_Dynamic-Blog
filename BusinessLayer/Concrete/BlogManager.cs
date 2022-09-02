@@ -19,22 +19,22 @@ namespace BusinessLayer.Concrete
             _blogDal = blogDal;
         }
 
-        public List<Blog> GetBlogById(int id)
+        public List<Blog> TGetBlogById(int id)
         {
             return _blogDal.GetListAll(x => x.BlogId == id);
         }
 
-        public List<Blog> GetBlogByWriter(int id)
+        public List<Blog> TGetBlogByWriter(int id)
         {
             return _blogDal.GetListAll(x => x.WriterId == id);
         }
 
-        public List<Blog> GetBlogListWithCategory()
+        public List<Blog> TGetBlogListWithCategory()
         {
             return _blogDal.GetListWithCategory();
         }
 
-        public List<Blog> GetListWithCategoryByWriter(int id)
+        public List<Blog> TGetListWithCategoryByWriter(int id)
         {
             return _blogDal.GetListWithCategoryByWriter(id);
         }
@@ -83,6 +83,11 @@ namespace BusinessLayer.Concrete
             return filter == null ?
                _blogDal.GetCount() :
                _blogDal.GetCount();
+        }
+
+        public List<Blog> TGetLastBlogs(int count)
+        {
+            return _blogDal.GetListAll().TakeLast(count).ToList();
         }
     }
 }

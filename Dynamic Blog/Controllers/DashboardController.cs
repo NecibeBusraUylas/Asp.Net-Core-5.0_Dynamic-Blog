@@ -1,5 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,17 +11,24 @@ namespace DynamicBlog.Controllers
 {
     public class DashboardController : Controller
     {
+        private readonly IBlogService _blogService;
+        private readonly ICategoryService _categoryService;
+
+        public DashboardController(IBlogService blogService, ICategoryService categoryService)
+        {
+            _blogService = blogService;
+            _categoryService = categoryService;
+        }
+
         [AllowAnonymous]
         public IActionResult Index()
         {
-            BlogManager blogManager = new BlogManager(new EFBlogRepository());
-            CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
-            WriterManager writerManager = new WriterManager(new EFWriterRepository());
             string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
             int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
-            ViewBag.totalBlogCount = blogManager.TGetList(x => x.BlogStatus == true).Count();
-            ViewBag.writerBlogCount = blogManager.GetBlogByWriter(id).Count();
-            ViewBag.categoryCount = categoryManager.TGetList().Count();
+
+            ViewBag.totalBlogCount = _blogService.TGetCount(x => x.BlogStatus == true);
+            ViewBag.writerBlogCount = _blogService.TGetBlogByWriter(id).Count();
+            ViewBag.categoryCount = _categoryService.TGetList().Count();
             return View();
         }
     }

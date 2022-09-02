@@ -14,6 +14,11 @@ namespace DynamicBlog.Controllers
     {
         private readonly INewsLetterService _newsLetterService;
 
+        public NewsLetterController(INewsLetterService newsLetterService)
+        {
+            _newsLetterService = newsLetterService;
+        }
+
         [HttpGet]
         public IActionResult SubscribeMail()
         {

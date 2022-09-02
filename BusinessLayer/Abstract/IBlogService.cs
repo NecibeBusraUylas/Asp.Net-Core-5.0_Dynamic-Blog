@@ -14,8 +14,10 @@ namespace BusinessLayer.Abstract
         //void UpdateBlog(Blog blog);
         //List<Blog> GetList();
         //Blog GetById(int id);
-        List<Blog> GetBlogListWithCategory();
-        List<Blog> GetBlogById(int id);
-        List<Blog> GetBlogByWriter(int id);
+        List<Blog> TGetBlogListWithCategory();
+        List<Blog> TGetBlogById(int id);
+        List<Blog> TGetBlogByWriter(int id);
+        public List<Blog> TGetListWithCategoryByWriter(int id);
+        List<Blog> TGetLastBlogs(int count);
     }
 }

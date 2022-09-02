@@ -1,6 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using BusinessLayer.ValidationRules;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +11,12 @@ namespace CoreDemo.Controllers
 {
     public class ContactController : Controller
     {
-        ContactManager contactManager = new ContactManager(new EFContactRepository());
+        IContactService _contactService;
+
+        public ContactController(IContactService contactService)
+        {
+            _contactService = contactService;
+        }
 
         [HttpGet]
         public IActionResult Index()
@@ -26,7 +29,7 @@ namespace CoreDemo.Controllers
         {  
                 contact.ContactDate = DateTime.Parse(DateTime.Now.ToShortDateString());
                 contact.ContactStatus = true;
-                contactManager.TAdd(contact);
+                _contactService.TAdd(contact);
                 return RedirectToAction("Index","Blog");
         }
     }

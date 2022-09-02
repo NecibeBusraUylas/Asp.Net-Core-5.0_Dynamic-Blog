@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,11 +11,16 @@ namespace DynamicBlog.ViewComponents.Category
 {
     public class CategoryListDashboard : ViewComponent
     {
-        CategoryManager categoryManager = new CategoryManager(new EFCategoryRepository());
+        private readonly ICategoryService _categoryService;
+
+        public CategoryListDashboard(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
 
         public IViewComponentResult Invoke()
         {
-            var values = categoryManager.TGetList();
+            var values = _categoryService.TGetList();
             return View(values);
         }
     }

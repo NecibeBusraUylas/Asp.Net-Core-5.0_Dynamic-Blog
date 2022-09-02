@@ -1,6 +1,4 @@
-﻿using BusinessLayer.Concrete;
-using DataAccessLayer.Concrete;
-using DataAccessLayer.EntityFramework;
+﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +14,13 @@ namespace DynamicBlog.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly IWriterService _writerService;
+
+        public LoginController(IWriterService writerService)
+        {
+            _writerService = writerService;
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
@@ -27,8 +32,7 @@ namespace DynamicBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Writer writer)
         {
-            WriterManager writermanager = new WriterManager(new EFWriterRepository());
-            var dataValue = writermanager.TGetByFilter(x => x.WriterMail == writer.WriterMail && x.WriterPassword == writer.WriterPassword);
+            var dataValue = _writerService.TGetByFilter(x => x.WriterMail == writer.WriterMail && x.WriterPassword == writer.WriterPassword);
             if (dataValue != null)
 
             {

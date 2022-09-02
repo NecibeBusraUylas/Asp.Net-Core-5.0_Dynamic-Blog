@@ -1,6 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
 using BusinessLayer.ValidationRules;
-using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
@@ -17,14 +16,20 @@ namespace Dynamic_Blog.Controllers
 {
     public class RegisterController : Controller
     {
-        WriterManager writerManager = new WriterManager(new EFWriterRepository());
-        WriterCity writerCity = new WriterCity();
+        private readonly IWriterService _writerService;
+        private readonly WriterCity _writerCity;
+
+        public RegisterController(IWriterService writerService, WriterCity writerCity)
+        {
+            _writerService = writerService;
+            _writerCity = writerCity;
+        }
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Cities = writerCity.GetCityList();
+            ViewBag.Cities = _writerCity.GetCityList();
             return View();
         }
 
@@ -32,24 +37,15 @@ namespace Dynamic_Blog.Controllers
         [HttpPost]
         public IActionResult Index(Writer writer, string passwordAgain, string cities, IFormFile imageFile)
         {
-            WriterValidator wv = new WriterValidator();
             AddProfileImage addProfileImage = new AddProfileImage();
-            ValidationResult results = wv.Validate(writer);
-            var validateWriter = writerManager.TGetByFilter(x => x.WriterMail == writer.WriterMail);
-            if (results.IsValid && writer.WriterPassword == passwordAgain && validateWriter == null)
+            var validateWriter = _writerService.TGetByFilter(x => x.WriterMail == writer.WriterMail);
+            if (ModelState.IsValid && writer.WriterPassword == passwordAgain && validateWriter == null)
             {
                 writer.WriterStatus = true;
                 writer.WriterAbout = "Deneme test";
                 writer.WriterImage = AddProfileImage.ImageAdd(imageFile);
-                writerManager.TAdd(writer);
+                _writerService.TAdd(writer);
                 return RedirectToAction("Index", "Blog");
-            }
-            else if (!results.IsValid)
-            {
-                foreach (var item in results.Errors)
-                {
-                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-                }
             }
             else if(writer.WriterPassword != passwordAgain)
             {
@@ -59,9 +55,9 @@ namespace Dynamic_Blog.Controllers
             {
                 ModelState.AddModelError("ErrorMessage", "Girdiğiniz e-mail adresine sahip bir kullanıcı sistemde mevcut. Lütfen başka bir e-mail adresi giriniz.");
             }
-            ViewBag.Cities = writerCity.GetCityList();
+            ViewBag.Cities = _writerCity.GetCityList();
 
-            return View();
+            return View(writer);
         }
     }
 }

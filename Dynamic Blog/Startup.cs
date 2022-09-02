@@ -76,8 +76,9 @@ namespace Dynamic_Blog
 
             services.AddSingleton(new GetUserInfo());
 
-            services.AddControllersWithViews().AddFluentValidation(x =>
-            x.RegisterValidatorsFromAssemblyContaining<BlogValidator>());
+            services.AddSingleton(new WriterCity());
+
+            services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<BlogValidator>());
 
             //services.AddSession(); //session
         }

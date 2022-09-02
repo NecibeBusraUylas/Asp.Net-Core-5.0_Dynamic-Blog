@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Concrete;
+﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,25 +12,31 @@ namespace DynamicBlog.Controllers
 {
     public class Message2Controller : Controller
     {
-        Message2Manager message2Manager = new Message2Manager(new EFMessage2Repository());
-        WriterManager writerManager = new WriterManager(new EFWriterRepository());
+        private readonly IMessage2Service _message2Service;
+        private readonly IWriterService _writerService;
+
+        public Message2Controller(IMessage2Service message2Service, IWriterService writerService)
+        {
+            _message2Service = message2Service;
+            _writerService = writerService;
+        }
 
         public IActionResult Inbox()
         {
-            var values = message2Manager.TGetReceivingMessageListByWriter(GetByWriterId());
+            var values = _message2Service.TGetReceivingMessageListByWriter(GetByWriterId());
             return View(values);
         }
 
         public IActionResult MessageDetails(int id)
         {
-            var value = message2Manager.TGetReceivingMessageListByWriter(GetByWriterId())
+            var value = _message2Service.TGetReceivingMessageListByWriter(GetByWriterId())
                 .Where(x => x.MessageId == id).FirstOrDefault();
             return View(value);
         }
 
         public int GetByWriterId()
         {
-            return writerManager.TGetByFilter(x => x.WriterId == int.Parse(User.Identity.Name)).WriterId;
+            return _writerService.TGetByFilter(x => x.WriterId == int.Parse(User.Identity.Name)).WriterId;
         }
     }
 }
