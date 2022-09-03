@@ -40,7 +40,7 @@ namespace Dynamic_Blog.Controllers
 
         public PartialViewResult CommentListByBlog(int id)
         {
-            var values = _commentService.GetList(id);
+            var values = _commentService.TGetList(id);
             return PartialView(values);
         }
     }

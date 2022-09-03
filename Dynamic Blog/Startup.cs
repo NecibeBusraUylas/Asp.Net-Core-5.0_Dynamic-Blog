@@ -1,10 +1,11 @@
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
-using DataAccessLayer.Abstract;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
-using FluentValidation.AspNetCore;
+using EntityLayer.Concrete;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -54,6 +55,15 @@ namespace Dynamic_Blog
                }
            );
 
+            services.AddDbContext<Context>();
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
+            // paroladaki zorunluluklardan bir kaçýndan kurtulmak istediðinde
+            //services.AddIdentity<AppUser, AppRole>(x =>
+            //{
+            //    x.Password.RequireUppercase = false;
+            //    x.Password.RequireNonAlphanumeric = false;
+            //}).AddEntityFrameworkStores<Context>();
+
             services.AddSingleton<IAboutService>(new AboutManager(new EFAboutRepository()));
 
             services.AddSingleton<IBlogService>(new BlogManager(new EFBlogRepository()));
@@ -78,7 +88,7 @@ namespace Dynamic_Blog
 
             services.AddSingleton(new WriterCity());
 
-            services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<BlogValidator>());
+            services.AddValidatorsFromAssemblyContaining<BlogValidator>();
 
             //services.AddSession(); //session
         }
