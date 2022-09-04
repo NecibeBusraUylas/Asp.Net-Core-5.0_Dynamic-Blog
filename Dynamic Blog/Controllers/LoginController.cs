@@ -1,8 +1,9 @@
-﻿using BusinessLayer.Abstract;
+﻿using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,55 +13,72 @@ using System.Threading.Tasks;
 
 namespace DynamicBlog.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
-        private readonly IWriterService _writerService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public LoginController(IWriterService writerService)
+        public LoginController(SignInManager<AppUser> signInManager)
         {
-            _writerService = writerService;
+            _signInManager = signInManager;
         }
-
-        [AllowAnonymous]
+     
         [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Index(Writer writer)
-        {
-            var dataValue = _writerService.TGetByFilter(x => x.WriterMail == writer.WriterMail && x.WriterPassword == writer.WriterPassword);
-            if (dataValue != null)
+        //[HttpPost]
+        //public async Task<IActionResult> Index(Writer writer)
+        //{
+        //    var dataValue = _writerService.TGetByFilter(x => x.WriterMail == writer.WriterMail && x.WriterPassword == writer.WriterPassword);
+        //    if (dataValue != null)
 
+        //    {
+        //        //      HttpContext.Session.SetString("username", p.WriterMail); //key-value pair for session
+        //        var claims = new List<Claim>
+        //        {
+        //            new Claim(ClaimTypes.Email, dataValue.WriterMail),
+        //            new Claim(ClaimTypes.Name,  dataValue.WriterId.ToString())
+        //        };
+        //        //ClaimsIdentity(IEnumerable<Claim>)-> Numaralandırılmış nesne koleksiyonu kullanarak sınıfının yeni bir örneğini ClaimsIdentity Claim başlatır.
+        //        //ClaimsIdentity(IEnumerable<Claim>, String)-> Belirtilen talepler ve kimlik doğrulama türüyle sınıfının yeni bir örneğini ClaimsIdentity başlatır.
+        //        var useridentity = new ClaimsIdentity(claims,"a");
+        //        ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
+        //        await HttpContext.SignInAsync(principal); //şifreli formatta cookie oluşturmak için
+        //        return RedirectToAction("Index", "Dashboard");
+        //    }
+        //    else
+        //    {
+        //        TempData["ErrorMessage"] = "Kullanıcı adı veya şifreniz yanlış";
+        //        return View();
+        //    }
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Index(UserSignInViewModel appUser)
+        {
+            if (ModelState.IsValid)
             {
-                //      HttpContext.Session.SetString("username", p.WriterMail); //key-value pair for session
-                var claims = new List<Claim>
+                var result = await _signInManager.PasswordSignInAsync(appUser.UserName, appUser.Password, appUser.IsPersistent, true);
+                if (result.Succeeded)
                 {
-                    new Claim(ClaimTypes.Email, dataValue.WriterMail),
-                    new Claim(ClaimTypes.Name,  dataValue.WriterId.ToString())
-                };
-                //ClaimsIdentity(IEnumerable<Claim>)-> Numaralandırılmış nesne koleksiyonu kullanarak sınıfının yeni bir örneğini ClaimsIdentity Claim başlatır.
-                //ClaimsIdentity(IEnumerable<Claim>, String)-> Belirtilen talepler ve kimlik doğrulama türüyle sınıfının yeni bir örneğini ClaimsIdentity başlatır.
-                var useridentity = new ClaimsIdentity(claims,"a");
-                ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                await HttpContext.SignInAsync(principal); //şifreli formatta cookie oluşturmak için
-                return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Kullanıcı adınız veya parolanız hatalı lütfen tekrar deneyiniz.";
+                    return View(appUser);
+                }
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Kullanıcı adı veya şifreniz yanlış";
-                return View();
-            }
+            return View(appUser);
         }
 
-        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index","Blog");
+            return RedirectToAction("Index", "Blog");
         }
     }
 }

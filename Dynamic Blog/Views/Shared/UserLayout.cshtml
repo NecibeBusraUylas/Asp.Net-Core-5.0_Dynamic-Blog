@@ -120,19 +120,20 @@
     <!-- //Custom-JavaScript-File-Links -->
     <script src="~/CoreBlogTema/js/bootstrap.js"></script>
 
-    <script>
+    <script type="text/javascript">
         $("#btnSubscribe").click(function () {
-            let mail = $("#SubscribeNewsLetterEmail").val();
+            let values = {
+                Mail: $("#SubscribeNewsLetterEmail").val()
+            };
             $.ajax({
-                type: "Post",
-                url: "/NewsLetter/SubscribeMail",
-                data: mail,
+                type: "post",
+                url: "/NewsLetter/SubscribeMail/",
+                data: values,
                 success: function (func) {
                     let result = jQuery.parseJSON(func);
-                    alert("Mail bültenimize abone oldunuz, teşekkürler.");
                 }
-            })
-        })
+            });
+        });
     </script>
 </body>
 </html>

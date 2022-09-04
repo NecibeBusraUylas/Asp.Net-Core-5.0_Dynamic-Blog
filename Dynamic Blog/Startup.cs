@@ -64,28 +64,6 @@ namespace Dynamic_Blog
             //    x.Password.RequireNonAlphanumeric = false;
             //}).AddEntityFrameworkStores<Context>();
 
-            services.AddSingleton<IAboutService>(new AboutManager(new EFAboutRepository()));
-
-            services.AddSingleton<IBlogService>(new BlogManager(new EFBlogRepository()));
-
-            services.AddSingleton<ICategoryService>(new CategoryManager(new EFCategoryRepository()));
-
-            services.AddSingleton<ICommentService>(new CommentManager(new EFCommentRepository()));
-
-            services.AddSingleton<IContactService>(new ContactManager(new EFContactRepository()));
-
-            services.AddSingleton<IMessage2Service>(new Message2Manager(new EFMessage2Repository()));
-
-            services.AddSingleton<INewsLetterService>(new NewsLetterManager(new EFNewsLetterRepository()));
-
-            services.AddSingleton<INotificationService>(new NotificationManager(new EFNotificationRepository()));
-
-            services.AddSingleton<IWriterService>(new WriterManager(new EFWriterRepository()));
-
-            services.AddSingleton<IAdminService>(new AdminManager(new EFAdminRepository()));
-
-            services.AddSingleton(new GetUserInfo());
-
             services.AddSingleton(new WriterCity());
 
             services.AddValidatorsFromAssemblyContaining<BlogValidator>();

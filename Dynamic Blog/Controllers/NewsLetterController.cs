@@ -28,7 +28,7 @@ namespace DynamicBlog.Controllers
         [HttpPost]
         public IActionResult SubscribeMail(NewsLetter newsLetter)
         {
-            if (_newsLetterService.TGetByMail(newsLetter.Mail) == null)
+            if (_newsLetterService.TGetByMail(newsLetter.Mail) == null && newsLetter.Mail != null)
             {
                 newsLetter.MailStatus = true;
                 _newsLetterService.TAdd(newsLetter);

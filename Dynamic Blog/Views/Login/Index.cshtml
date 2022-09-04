@@ -1,4 +1,5 @@
-﻿
+﻿@model DynamicBlog.Models.UserSignInViewModel
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/UserLayout.cshtml";
@@ -11,16 +12,16 @@
             <div class="login p-5 bg-light mx-auto mw-100">
                 <form method="post">
                     <div class="form-group">
-                        <label for="exampleInputEmail1 mb-2">E-mail Adresi</label>
-                        <input type="email" class="form-control" name="WriterMail" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="E-mail adresinizi giriniz." required="">
+                        <label for="exampleInputUserName1 mb-2">Kullanıcı Adınız</label>
+                        <input type="text" class="form-control" asp-for="UserName" id="exampleInputUserName1" aria-describedby="userNameHelp" placeholder="Kullanıcı adınızı giriniz." required="">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1 mb-2">Parola</label>
-                        <input type="password" class="form-control" name="WriterPassword" id="exampleInputPassword1" placeholder="Parolanızı giriniz." required="">
+                        <input type="password" class="form-control" asp-for="Password" id="exampleInputPassword1" placeholder="Parolanızı giriniz." required="">
                     </div>
                     <div class="form-check mb-2">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Beni Hatırla</label>
+                        <label class="form-check-label" asp-for="IsPersistent" for="exampleCheck1">Oturumumu Açık Bırak</label>
                     </div>
                     <button type="submit" class="btn btn-primary submit mb-4">Giriş Yap</button>
                     <p class="text-danger">@TempData["ErrorMessage"]</p>

@@ -1,5 +1,8 @@
 ﻿using BusinessLayer.Abstract;
+using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,22 +16,32 @@ namespace DynamicBlog.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly ICategoryService _categoryService;
+        private readonly UserManager<AppUser> _userManager;
+        private Context c = new Context();
 
-        public DashboardController(IBlogService blogService, ICategoryService categoryService)
+        public DashboardController(IBlogService blogService, ICategoryService categoryService, UserManager<AppUser> userManager)
         {
             _blogService = blogService;
             _categoryService = categoryService;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
-            int id = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value);
+            string userName = User.Identity.Name;
+            //var userMail = c.Users.Where(x => x.UserName == userName).Select(y => y.Email).FirstOrDefault();
+            //var writerId = c.Writers.Where(x=> x.WriterMail == userMail).Select(y=> y.WriterId).FirstOrDefault();
+
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var id = user.Id;
+
+
 
             ViewBag.totalBlogCount = _blogService.TGetCount(x => x.BlogStatus == true);
-            ViewBag.writerBlogCount = _blogService.TGetBlogByWriter(id).Count();
-            ViewBag.categoryCount = _categoryService.TGetList().Count();
+            ViewBag.writerBlogCount = c.Blogs.Where(x => x.WriterId == id).Count();
+            ViewBag.categoryCount = _categoryService.TGetCount(x => x.CategoryStatus == true);
             return View();
         }
     }

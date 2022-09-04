@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Dynamic_Blog.Controllers
             return PartialView();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public PartialViewResult PartialAddComment(Comment comment)
         {

@@ -26,6 +26,7 @@ namespace BusinessLayer.Concrete
 
         public void TAdd(NewsLetter t)
         {
+            t.MailStatus = true;
             _newsLetterDal.Add(t);
         }
 

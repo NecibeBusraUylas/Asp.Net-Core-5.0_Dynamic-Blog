@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityLayer.Concrete
+namespace DynamicBlog.Models
 {
-    public class AppUser : IdentityUser<int>
+    public class UserUpdateViewModel
     {
         public string NameSurname { get; set; }
+        public string Username { get; set; }
+        public string Mail { get; set; }
         public string ImageUrl { get; set; }
+        public string Password { get; set; }
         public string About { get; set; }
     }
 }

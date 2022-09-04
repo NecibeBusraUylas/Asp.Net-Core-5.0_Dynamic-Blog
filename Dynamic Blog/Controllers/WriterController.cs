@@ -1,10 +1,13 @@
 ﻿using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using DataAccessLayer.Concrete;
+using DataAccessLayer.EntityFramework;
 using DynamicBlog.Models;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,14 +21,15 @@ namespace DynamicBlog.Controllers
     public class WriterController : Controller
     {
         private readonly IWriterService _writerService;
-        private readonly GetUserInfo _userInfo;
         private readonly WriterCity _writerCity;
+        private readonly UserManager<AppUser> _userManager;
+        private Context c = new Context();
 
-        public WriterController(IWriterService writerService, GetUserInfo userInfo, WriterCity writerCity)
+        public WriterController(IWriterService writerService, WriterCity writerCity, UserManager<AppUser> userManager)
         {
             _writerService = writerService;
-            _userInfo = userInfo;
             _writerCity = writerCity;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -64,56 +68,35 @@ namespace DynamicBlog.Controllers
         }
 
         [HttpGet]
-        public IActionResult WriterEditProfile()
+        public async Task<IActionResult> WriterEditProfile()
         {
-            ViewBag.Cities = _writerCity.GetCityList();
-            var writerValues = _writerService.TGetByFilter(x => x.WriterId == _userInfo.GetId(User));
-            return View(writerValues);
+            //ViewBag.Cities = _writerCity.GetCityList();
+            //var writerValues = _writerService.TGetByFilter(x => x.WriterId == _userInfo.GetId(User));
+            //return View(writerValues);
+            var values = await _userManager.FindByNameAsync(User.Identity.Name);
+            UserUpdateViewModel model = new UserUpdateViewModel();
+            model.Mail = values.Email;
+            model.NameSurname = values.NameSurname;
+            model.Username = values.UserName;
+            model.ImageUrl = values.ImageUrl;
+            model.Username = values.UserName;
+            model.About = values.About;
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult WriterEditProfile(Writer writer, string passwordAgain, IFormFile imageFile)
+        public async Task<IActionResult> WriterEditProfile(UserUpdateViewModel userUpdateViewModel) //IFormFile imageFile
         {
-            WriterValidator validationRules = new WriterValidator();
-            var values = _writerService.TGetById(_userInfo.GetId(User));
-            if (writer.WriterPassword == null)
-            {
-                writer.WriterPassword = values.WriterPassword;
-                passwordAgain = writer.WriterPassword;
-            }
-            ValidationResult results = validationRules.Validate(writer);
-            if (results.IsValid && writer.WriterPassword == passwordAgain)
-            {
-                if (writer.WriterPassword == null)
-                {
-                    writer.WriterPassword = values.WriterPassword;
-                    passwordAgain = writer.WriterPassword;
-                }
-                else if (imageFile == null)
-                {
-                    writer.WriterImage = values.WriterImage;
-                }
-                else if(imageFile != null)
-                {
-                    writer.WriterImage = AddProfileImage.ImageAdd(imageFile);
-                }
-                writer.WriterStatus = values.WriterStatus;
-                _writerService.TUpdate(writer);
-                return RedirectToAction("Index", "Dashboard");
-            }
-            else if (!results.IsValid)
-            {
-                foreach (var item in results.Errors)
-                {
-                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-                }
-            }
-            else if (writer.WriterPassword != passwordAgain && writer.WriterPassword != values.WriterPassword)
-            {
-                ModelState.AddModelError("PasswordAgainMessage","Girdiğiniz parolalar eşleşmedi lütfen tekrar deneyin.");
-            }
-            ViewBag.Cities = _writerCity.GetCityList();
-            return View();
+            var values = await _userManager.FindByNameAsync(User.Identity.Name);
+            values.NameSurname = userUpdateViewModel.NameSurname;
+            //userUpdateViewModel.ImageUrl = AddProfileImage.ImageAdd(imageFile);
+            values.ImageUrl = userUpdateViewModel.ImageUrl;
+            values.Email = userUpdateViewModel.Mail;
+            values.About = userUpdateViewModel.About;
+            //values.PasswordHash = _userManager.PasswordHasher.HashPassword(values, userUpdateViewModel.Password);
+            var result = await _userManager.UpdateAsync(values);
+            //ViewBag.Cities = _writerCity.GetCityList();
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }

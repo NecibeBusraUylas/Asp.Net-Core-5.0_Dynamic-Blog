@@ -10,13 +10,14 @@ namespace DynamicBlog.ViewComponents.Writer
 {
     public class WriterNotification: ViewComponent
     {
-        NotificationManager notificationManager = new NotificationManager(new EFNotificationRepository());
+        private NotificationManager notificationManager = new NotificationManager(new EFNotificationRepository());
+        
         public IViewComponentResult Invoke()
         {
             var values = notificationManager.TGetList(x => x.NotificationStatus == true);
             if (values.Count() > 3)
             {
-                values = values.Take(3).ToList();
+                values = values.TakeLast(3).ToList();
             }
             return View(values);
         }

@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,16 +13,21 @@ namespace DynamicBlog.ViewComponents.Writer
 {
     public class WriterAboutOnDashboard: ViewComponent
     {
-        WriterManager writerManager = new WriterManager(new EFWriterRepository());
-        Context c = new Context();
-        public IViewComponentResult Invoke()
+        private WriterManager writerManager = new WriterManager(new EFWriterRepository());
+        private readonly UserManager<AppUser> _userManager;
+        private Context c = new Context();
+
+        public WriterAboutOnDashboard(UserManager<AppUser> userManager)
         {
-            //string mail = User.Identity.Name;
-            //var writerId = c.Writers.Where(x => x.WriterMail == mail).Select(y => y.WriterId).FirstOrDefault();
-            //var values = writerManager.GetWriterById(writerId);
-            //return View(values);
-            var values = writerManager.TGetByFilter(x => x.WriterId == int.Parse(User.Identity.Name));
-            return View(values);
+            _userManager = userManager;
+        }
+
+
+        public async Task<IViewComponentResult> InvokeAsync() 
+        { 
+            string userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+            return View(user);
         }
     }
 }

@@ -10,7 +10,6 @@
     <h6 class="p-3 mb-0">Mesajlar</h6>
     @foreach (var item in Model)
     {
-
         TimeSpan time = now.Subtract(item.MessageDate);
         if (time.Days == 0)
         {

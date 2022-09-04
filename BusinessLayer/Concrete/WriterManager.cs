@@ -39,11 +39,6 @@ namespace BusinessLayer.Concrete
             _writerDal.Update(t);
         }
 
-        public List<Writer> GetList(Expression<Func<Writer, bool>> filter = null)
-        {
-            return _writerDal.GetListAll(filter);
-        }
-
         public int TGetCount(Expression<Func<Writer, bool>> filter = null)
         {
             return filter == null ?
@@ -52,7 +47,7 @@ namespace BusinessLayer.Concrete
         }
 
 
-        public List<Writer> GetWriterById(int id)
+        public List<Writer> TGetWriterById(int id)
         {
             return _writerDal.GetListAll(x => x.WriterId == id);
         }

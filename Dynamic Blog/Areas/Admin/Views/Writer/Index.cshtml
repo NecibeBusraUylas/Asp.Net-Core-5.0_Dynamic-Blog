@@ -71,8 +71,8 @@
                     tableHtml += "</table>";
                     $("#writerList").html(tableHtml);
                 }
-            })
-        })
+            });
+        });
 
         $("#btnGetById").click(function () {
             let id = $("#writerId").val();
@@ -90,8 +90,8 @@
                                                         <tr><td>${w.Id}</td> <td>${w.Name}</td></tr></table>`
                     $("#writerGet").html(tableHtml);
                 }
-            })
-        })
+            });
+        });
 
         $("#btnAddWriter").click(function () {
             let writer = {
@@ -106,8 +106,8 @@
                     let result = jQuery.parseJSON(func);
                     alert("Yazar ekleme işlemi başarılı bir şekilde gerçekleşti.")
                 }
-            })
-        })
+            });
+        });
 
         $("#btnDeleteWriter").click(x => {
             let id = $("#deleteWriterId").val();
@@ -118,8 +118,8 @@
                 success: function (func) {
                     alert("Yazar silme işlemi başarılı bir şekilde gerçekleşti.");
                 }
-            })
-        })
+            });
+        });
 
         $("#btnUpdateWriter").click(function () {
             let writer = {
