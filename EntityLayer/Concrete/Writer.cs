@@ -20,10 +20,10 @@ namespace EntityLayer.Concrete
         public string WriterCity { get; set; }
 
         //relation
-        public List<Blog> Blogs { get; set; }
+        //public List<Blog> Blogs { get; set; }
 
-        //relation    - yazatın gönderdiği ve aldığı tüm r
-        public virtual ICollection<Message2> WriterSender { get; set; }
-        public virtual ICollection<Message2> WriterReceiver { get; set; }
+        //relation    - yazarın gönderdiği ve aldığı tüm mesajlar
+        //public virtual ICollection<Message2> WriterSender { get; set; }
+        //public virtual ICollection<Message2> WriterReceiver { get; set; }
     }
 }

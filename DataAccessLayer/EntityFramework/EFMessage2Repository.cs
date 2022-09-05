@@ -21,5 +21,14 @@ namespace DataAccessLayer.EntityFramework
                 .Where(x => x.ReceiverId == id).ToList();
             }
         }
+
+        public List<Message2> GetSendingMessageListByWriter(int id)
+        {
+            using (var c = new Context())
+            {
+                return c.Messages2.Include(x => x.ReceiverUser)
+                .Where(x => x.SenderId == id).ToList();
+            }
+        }
     }
 }

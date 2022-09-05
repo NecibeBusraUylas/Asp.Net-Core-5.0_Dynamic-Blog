@@ -32,13 +32,11 @@ namespace DynamicBlog.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            string mail = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Email).Value.ToString();
-            string id = ((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.Name).Value;
-            ViewBag.id = id;
-            ViewBag.userMail = mail;
-            ViewBag.Name = _writerService.TGetByFilter(x => x.WriterMail == mail).WriterName;
+            var userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+            ViewBag.name = user.NameSurname;
             return View();
         }
 
@@ -93,7 +91,10 @@ namespace DynamicBlog.Controllers
             values.ImageUrl = userUpdateViewModel.ImageUrl;
             values.Email = userUpdateViewModel.Mail;
             values.About = userUpdateViewModel.About;
-            //values.PasswordHash = _userManager.PasswordHasher.HashPassword(values, userUpdateViewModel.Password);
+            if (!userUpdateViewModel.ChangePassword)
+            {
+                values.PasswordHash = _userManager.PasswordHasher.HashPassword(values, userUpdateViewModel.Password);
+            }
             var result = await _userManager.UpdateAsync(values);
             //ViewBag.Cities = _writerCity.GetCityList();
             return RedirectToAction("Index", "Dashboard");

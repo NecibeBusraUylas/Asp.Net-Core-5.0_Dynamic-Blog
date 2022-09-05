@@ -1,9 +1,11 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -18,6 +20,13 @@ namespace Dynamic_Blog.Controllers
         private CategoryManager _categoryManager = new CategoryManager(new EFCategoryRepository());
         private WriterManager _writerManager = new WriterManager(new EFWriterRepository());
         private BlogManager _blogManager = new BlogManager(new EFBlogRepository());
+        private readonly UserManager<AppUser> _userManager;
+        Context c = new Context();
+
+        public BlogController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
 
         [AllowAnonymous]
         public IActionResult Index()
@@ -34,13 +43,12 @@ namespace Dynamic_Blog.Controllers
             return View(values);
         }
 
-        public IActionResult BlogListByWriter() 
+        public async Task<IActionResult> BlogListByWriter() 
         {
-            var userMail = User.Identity.Name;
-            var writerId = _writerManager.TGetList(x=> x.WriterMail == userMail).Select(w => w.WriterId).FirstOrDefault();
-            var writerValues = _writerManager.TGetById(writerId);
-            var blogs = _blogManager.TGetBlogByWriter(writerId);
-            return View(blogs);
+            var userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+            var values = _blogManager.TGetListWithCategoryByWriter(user.Id);
+            return View(values);
         }
 
         [HttpGet]
@@ -62,8 +70,10 @@ namespace Dynamic_Blog.Controllers
         }
 
         [HttpPost]
-        public IActionResult BlogAdd(Blog blog)
+        public async Task<IActionResult> BlogAdd(Blog blog)
         {
+            var userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
             BlogValidator blogValidator = new BlogValidator();
             ValidationResult results = blogValidator.Validate(blog);
             if (results.IsValid)
@@ -71,7 +81,7 @@ namespace Dynamic_Blog.Controllers
                 var userMail = User.Identity.Name;
                 blog.BlogStatus = true;
                 blog.BlogCreationDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                blog.WriterId = _writerManager.TGetList(x => x.WriterMail == userMail).Select(w => w.WriterId).FirstOrDefault();
+                blog.WriterId = user.Id;
                 _blogManager.TAdd(blog);
                 return RedirectToAction("BlogListByWriter", "Blog");
             }
@@ -134,15 +144,16 @@ namespace Dynamic_Blog.Controllers
         }
 
         [HttpPost]
-        public IActionResult BlogEdit(Blog blog)
+        public async Task<IActionResult> BlogEdit(Blog blog)
         {
             BlogValidator blogValidator = new BlogValidator();
             ValidationResult results = blogValidator.Validate(blog);
             if (results.IsValid)
             {
-                var userMail = User.Identity.Name;
+                var userName = User.Identity.Name;
+                var user = await _userManager.FindByNameAsync(userName);
                 var value = _blogManager.TGetById(blog.BlogId);
-                blog.WriterId = _writerManager.TGetList(x => x.WriterMail == userMail).Select(w => w.WriterId).FirstOrDefault();
+                blog.WriterId = user.Id;
                 blog.BlogId = value.BlogId;
                 blog.BlogCreationDate = value.BlogCreationDate;
                 blog.BlogStatus = true;

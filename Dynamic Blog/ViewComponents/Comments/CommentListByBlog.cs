@@ -20,7 +20,7 @@ namespace Dynamic_Blog.ViewComponents.Comments
 
         public IViewComponentResult Invoke(int id)
         {
-            var values = _commentService.TGetList(id);
+            var values = _commentService.TGetListById(id);
             return View(values);
         }
     }

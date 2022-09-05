@@ -13,5 +13,6 @@ namespace DynamicBlog.Models
         public string ImageUrl { get; set; }
         public string Password { get; set; }
         public string About { get; set; }
+        public bool ChangePassword { get; set; }
     }
 }

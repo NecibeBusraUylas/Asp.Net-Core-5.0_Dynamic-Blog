@@ -2,25 +2,25 @@
 @model List<Message2>
 
 @{
-    ViewData["Title"] = "Inbox";
+    ViewData["Title"] = "Sendbox";
     Layout = "~/Views/Shared/WriterLayout.cshtml";
 }
 
-<h1>Gelen Mesaj Kutusu</h1>
+<h1>Giden Mesaj Kutusu</h1>
 <br />
 <table class="table table-bordered">
     <tr>
         <th>Konu</th>
-        <th>Gönderen</th>
+        <th>Alıcı</th>
         <th>Tarih</th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
             <td>@item.Subject</td>
-            <td>@item.SenderUser.NameSurname</td>
-            <td>@(((DateTime)item.MessageDate).ToString("dd-MMM-yyyy"))</td>
-            <td><a href="/Message2/MessageDetails/@item.MessageId" class="btn btn-warning">Mesajı Aç</a></td>
+            <td>@item.ReceiverUser.NameSurname</td>
+            <td>@item.MessageDate</td>
+            <td><a href="/Message2/MessageDetailsSendbox/@item.MessageId" class="btn btn-warning">Mesajı Aç</a></td>
         </tr>
     }
 </table>

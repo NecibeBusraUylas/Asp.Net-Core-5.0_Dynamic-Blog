@@ -64,5 +64,10 @@ namespace BusinessLayer.Concrete
                _message2Dal.GetCount() :
                _message2Dal.GetCount();
         }
+
+        public List<Message2> TGetSendingMessageListByWriter(int id)
+        {
+             return _message2Dal.GetSendingMessageListByWriter(id);
+        }
     }
 }

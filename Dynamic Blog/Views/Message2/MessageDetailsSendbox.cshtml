@@ -1,14 +1,14 @@
 ﻿@model EntityLayer.Concrete.Message2
 
 @{
-    ViewData["Title"] = "MessageDetails";
+    ViewData["Title"] = "MessageDetailsSendbox";
     Layout = "~/Views/Shared/WriterLayout.cshtml";
 }
 
-<h1>Gelen Mesaj Detay Sayfası</h1>
+<h1>Gönderilen Mesaj Detay Sayfası</h1>
 <br />
-@Html.Label("Gönderen")
-@Html.TextBoxFor(x => x.SenderUser.NameSurname, new { @class = "form-control", disabled = "disabled" })
+@Html.Label("Alıcı")
+@Html.TextBoxFor(x => x.ReceiverUser.NameSurname, new { @class = "form-control", disabled = "disabled" })
 <br />
 @Html.Label("Mesaj Başlığı")
 @Html.TextBoxFor(x => x.Subject, new { @class = "form-control", disabled = "disabled" })

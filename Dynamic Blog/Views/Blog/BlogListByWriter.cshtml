@@ -7,9 +7,9 @@
 }
 
 <h1>Yazarın Blogları</h1>
+<br />
 <table class="table table-bordered">
     <tr>
-        <th>#</th>
         <th>Blog Başlığı</th>
         <th>Oluşturma Tarihi</th>
         <th>Kategori</th>
@@ -22,7 +22,6 @@
         @foreach (var item in Model)
         {
             <tr>
-                <th>@item.BlogId</th>
                 <td>@item.BlogTitle</td>
                 <td>@(((DateTime)item.BlogCreationDate).ToString("dd-MMM-yyyy"))</td>
                 <td>@item.Category.CategoryName</td>

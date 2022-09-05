@@ -9,15 +9,12 @@
 }
 
 <h1> Bildirimler</h1>
-<table class="table table-bordered table-responsive">
-    <thead>
+<br />
+<table class="table table-bordered">
         <tr>
-            <th>#</th>
             <th>Bildirim</th>
-            <td>Süre</td>
+            <th>Süre</th>
         </tr>
-    </thead>
-    <tbody>
         @foreach (var item in Model)
         {
             TimeSpan time = now.Subtract(item.NotificationDate);
@@ -30,10 +27,8 @@
                 messagTime = new DateTime(time.Ticks).ToString("d 'Gün önce' ");
             }
             <tr>
-                <td>@item.NotificationId</td>
                 <td>@item.NotificationDetails</td>
                 <td>@messagTime</td>
             </tr>
         }
-    </tbody>
 </table>

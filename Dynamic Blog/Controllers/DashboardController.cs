@@ -27,22 +27,21 @@ namespace DynamicBlog.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             string userName = User.Identity.Name;
-            //var userMail = c.Users.Where(x => x.UserName == userName).Select(y => y.Email).FirstOrDefault();
-            //var writerId = c.Writers.Where(x=> x.WriterMail == userMail).Select(y=> y.WriterId).FirstOrDefault();
-
-
-            var user = await _userManager.FindByNameAsync(userName);
-            var id = user.Id;
-
-
-
+            var id = c.Users.Where(x => x.UserName == userName).Select(y => y.Id).FirstOrDefault();
             ViewBag.totalBlogCount = _blogService.TGetCount(x => x.BlogStatus == true);
             ViewBag.writerBlogCount = c.Blogs.Where(x => x.WriterId == id).Count();
             ViewBag.categoryCount = _categoryService.TGetCount(x => x.CategoryStatus == true);
             return View();
+            //string userName = User.Identity.Name;
+            //var user = await _userManager.FindByNameAsync(userName);
+            //var id = user.Id;
+            //ViewBag.totalBlogCount = _blogService.TGetCount(x => x.BlogStatus == true);
+            //ViewBag.writerBlogCount = c.Blogs.Where(x => x.WriterId == id).Count();
+            //ViewBag.categoryCount = _categoryService.TGetCount(x => x.CategoryStatus == true);
+            //return View();
         }
     }
 }

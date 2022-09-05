@@ -22,7 +22,6 @@ namespace DynamicBlog.ViewComponents.Writer
             _userManager = userManager;
         }
 
-
         public async Task<IViewComponentResult> InvokeAsync() 
         { 
             string userName = User.Identity.Name;
