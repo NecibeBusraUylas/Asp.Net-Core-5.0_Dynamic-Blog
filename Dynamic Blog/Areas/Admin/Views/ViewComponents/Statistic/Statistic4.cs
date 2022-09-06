@@ -1,4 +1,6 @@
 ﻿using BusinessLayer.Abstract;
+using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,19 +11,20 @@ namespace DynamicBlog.Areas.Admin.Views.ViewComponents.Statistic
 {
     public class Statistic4 : ViewComponent
     {
-        private readonly IAdminService _adminService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public Statistic4(IAdminService adminService)
+        public Statistic4(UserManager<AppUser> userManager)
         {
-            _adminService = adminService;
+            _userManager = userManager;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var admin = _adminService.TGetByFilter(x => x.AdminId == 1);
-            ViewBag.name = admin.Name;
-            ViewBag.image = admin.ImageURL;
-            ViewBag.description = admin.ShortDescription;
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.name = user.NameSurname;
+            ViewBag.image = user.ImageUrl;
+            ViewBag.description = user.About;
+            ViewBag.mail = user.Email;
             return View();
         }
     }

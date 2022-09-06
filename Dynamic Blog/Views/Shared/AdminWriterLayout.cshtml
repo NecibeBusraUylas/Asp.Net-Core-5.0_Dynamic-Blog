@@ -140,14 +140,15 @@
             <div class="wrapper wrapper-content animated fadeInRight">
                 @RenderBody()
             </div>
-            <div class="copyright-footer">
-                <div class="copy-right">
-                    <p>
-                        © @DateTime.Now.Year Weblog Tüm Hakları Saklıdır | Design by
-                        <a href="https://www.linkedin.com/in/necibebusrauylas/" target="_blank">Necibe Büşra Uylaş</a>
-                    </p>
+            <div class="footer">
+                <div class="float-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Example Company &copy; 2014-2018
                 </div>
             </div>
+
         </div>
     </div>
     <!-- Mainly scripts -->
@@ -177,5 +178,7 @@
                 radioClass: 'iradio_square-green',
             });
         });</script>
+
+     @await RenderSectionAsync("writerClassScripts")  // script'in çalışması için ona bağlı olan layout'a eklenecek parça
 </body>
 </html>
