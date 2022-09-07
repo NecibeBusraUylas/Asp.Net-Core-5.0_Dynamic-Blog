@@ -64,5 +64,10 @@ namespace BusinessLayer.Concrete
                _commentDal.GetCount() :
                _commentDal.GetCount();
         }
+
+        public List<Comment> TGetBlogListWithComment()
+        {
+            return _commentDal.GetBlogListWithComment();
+        }
     }
 }
