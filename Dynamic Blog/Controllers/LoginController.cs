@@ -80,5 +80,10 @@ namespace DynamicBlog.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Blog");
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
